@@ -23,7 +23,7 @@ test_users = [
     {
         'email': 'lyon.bonellie@college.edu',
         'password': '1234',
-        'role': 'student',
+        'role': 'faculty',
         'first_name': 'Lyon',
         'last_name': 'Bonellie',
         'username': 'lyon.bonellie'

@@ -27,6 +27,8 @@
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
   border: 1px solid rgba(102, 126, 234, 0.1);
   animation: cardSlideIn 0.5s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes cardSlideIn {
@@ -41,7 +43,8 @@
 }
 
 .summary-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .welcome-title {
@@ -59,8 +62,10 @@
 
 .student-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
+  margin-top: 0;
+  width: 100%;
 }
 
 .detail-item {
@@ -121,6 +126,10 @@
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stat-card::before {
@@ -149,7 +158,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 0px;
 }
 
 .stat-header h3 {
@@ -172,8 +181,8 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #333;
-  line-height: 1;
-  margin: 0.5rem 0;
+  line-height: 1.2;
+  margin: 0.75rem 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -369,6 +378,7 @@
 
   .stat-card {
     padding: 1.25rem;
+    min-height: 180px;
   }
 
   .stat-value {
@@ -400,6 +410,10 @@
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    min-height: 160px;
   }
 
   .stat-header h3 {

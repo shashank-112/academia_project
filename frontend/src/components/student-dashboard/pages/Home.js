@@ -64,10 +64,11 @@ const Home = () => {
       {/* STUDENT SUMMARY CARD */}
       <section className="summary-section">
         <div className="summary-card">
-          <div className="summary-header">
+          <div style={{marginBottom: '0px'}} className="summary-header">
             <h1 className="welcome-title">Welcome back, {profile?.first_name}! 👋</h1>
             <p className="summary-date">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
+          
 
           <div className="student-details-grid">
             <div className="detail-item">
