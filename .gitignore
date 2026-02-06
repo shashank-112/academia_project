@@ -17,7 +17,7 @@ db.sqlite3
 # =========================
 # Conda / Virtual Environments
 # =========================
-academia_project/
+# academia_project/
 env/
 venv/
 .venv/
