@@ -104,37 +104,29 @@ const Home = () => {
         <h2 className="section-title">Quick Stats</h2>
         <div className="stats-grid">
           <div className="stat-card cgpa-card">
-            <div className="stat-header">
-              <h3>Current CGPA</h3>
-              <span className="stat-icon">📊</span>
-            </div>
+            <span className="stat-icon">📊</span>
+            <h3 className="stat-title">CURRENT CGPA</h3>
             <div className="stat-value">{calculateCGPA()}</div>
             <p className="stat-subtitle">Out of 10.0</p>
           </div>
 
           <div className="stat-card backlogs-card">
-            <div className="stat-header">
-              <h3>Backlogs</h3>
-              <span className="stat-icon">⚠️</span>
-            </div>
+            <span className="stat-icon">⚠️</span>
+            <h3 className="stat-title">BACKLOGS</h3>
             <div className="stat-value">{backlogCount}</div>
             <p className="stat-subtitle">{backlogCount === 0 ? 'All clear!' : 'Courses pending'}</p>
           </div>
 
           <div className="stat-card fee-card">
-            <div className="stat-header">
-              <h3>Fee Status</h3>
-              <span className="stat-icon">💰</span>
-            </div>
+            <span className="stat-icon">💰</span>
+            <h3 className="stat-title">FEE STATUS</h3>
             <div className="stat-value">₹{feeStatus.amount}</div>
             <p className="stat-subtitle">Due amount</p>
           </div>
 
           <div className="stat-card notification-card">
-            <div className="stat-header">
-              <h3>Notifications</h3>
-              <span className="stat-icon">🔔</span>
-            </div>
+            <span className="stat-icon">🔔</span>
+            <h3 className="stat-title">NOTIFICATIONS</h3>
             <div className="stat-value">{notificationCount}</div>
             <p className="stat-subtitle">Unread messages</p>
           </div>

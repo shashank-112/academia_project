@@ -50,6 +50,33 @@
   word-break: break-word;
 }
 
+.demo-email-btn {
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.demo-email-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.demo-email-btn:active {
+  transform: scale(0.98);
+}
+
+.copy-feedback {
+  font-size: 0.85em;
+  color: #4ade80;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .login-card {
   background: white;
   border-radius: 12px;

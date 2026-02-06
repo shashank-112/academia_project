@@ -39,7 +39,7 @@ const Students = () => {
           </select>
         </div>
 
-        <div className="filter-group">
+        <div style={{marginBottom: '24px'}} className="filter-group">
           <label>Section</label>
           <select value={filters.section} onChange={(e) => setFilters({...filters, section: e.target.value})}>
             <option value="all">All Sections</option>

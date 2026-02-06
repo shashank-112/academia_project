@@ -15,6 +15,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const handleEmailClick = (emailText) => {
+    navigator.clipboard.writeText(emailText);
+  };
+
   const roles = [
     { id: 'student', label: 'Student', icon: '👨‍🎓' },
     { id: 'management', label: 'Management', icon: '👔' },
@@ -52,10 +56,18 @@ const Login = () => {
       <div className="demo-section">
         <h3 className="demo-heading">Demo Emails</h3>
         <div className="demo-emails">
-          <span>4ycsea1@college.edu (Student)</span>
-          <span>lyon.bonellie@college.edu (Student)</span>
-          <span>anny.gartery@tpcell.edu (TP Cell)</span>
-          <span>amberly.carryer@management.edu (Management)</span>
+          <span className="demo-email-btn" onClick={() => handleEmailClick('4ycsea1@college.edu')}>
+            4ycsea1@college.edu (Student)
+          </span>
+          <span className="demo-email-btn" onClick={() => handleEmailClick('lyon.bonellie@college.edu')}>
+            lyon.bonellie@college.edu (Faculty)
+          </span>
+          <span className="demo-email-btn" onClick={() => handleEmailClick('anny.gartery@tpcell.edu')}>
+            anny.gartery@tpcell.edu (TP Cell)
+          </span>
+          <span className="demo-email-btn" onClick={() => handleEmailClick('amberly.carryer@management.edu')}>
+            amberly.carryer@management.edu (Management)
+          </span>
         </div>
       </div>
       <div className="login-card">
