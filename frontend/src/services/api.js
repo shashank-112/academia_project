@@ -66,8 +66,70 @@ export const facultyService = {
 };
 
 export const managementService = {
+  // Profile Management
   getProfile: async () => {
     const response = await apiClient.get('/management/profile/');
+    return response.data;
+  },
+  updateProfile: async (data) => {
+    const response = await apiClient.put('/management/profile/', data);
+    return response.data;
+  },
+  changePassword: async (currentPassword, newPassword) => {
+    const response = await apiClient.post('/management/change-password/', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+    return response.data;
+  },
+
+  // Student Management
+  getAllStudents: async (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    const response = await apiClient.get(`/management/students/?${params}`);
+    return response.data;
+  },
+  getStudentCount: async () => {
+    const response = await apiClient.get('/management/students/count/');
+    return response.data;
+  },
+
+  // Faculty Management
+  getAllFaculty: async () => {
+    const response = await apiClient.get('/management/faculty/');
+    return response.data;
+  },
+  getFacultyCount: async () => {
+    const response = await apiClient.get('/management/faculty/count/');
+    return response.data;
+  },
+
+  // Fee Management
+  getFeeSummary: async () => {
+    const response = await apiClient.get('/management/fees/summary/');
+    return response.data;
+  },
+  getFeeStats: async () => {
+    const response = await apiClient.get('/management/fees/stats/');
+    return response.data;
+  },
+  getStudentFeeDetails: async (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    const response = await apiClient.get(`/management/fees/details/?${params}`);
+    return response.data;
+  },
+
+  // Notification Management
+  createNotification: async (notificationData) => {
+    const response = await apiClient.post('/management/notifications/', notificationData);
+    return response.data;
+  },
+  getSentNotifications: async () => {
+    const response = await apiClient.get('/management/notifications/');
+    return response.data;
+  },
+  getRecentNotifications: async (limit = 5) => {
+    const response = await apiClient.get(`/management/notifications/recent/?limit=${limit}`);
     return response.data;
   },
 };
@@ -75,6 +137,10 @@ export const managementService = {
 export const tpcellService = {
   getProfile: async () => {
     const response = await apiClient.get('/tpcell/profile/');
+    return response.data;
+  },
+  getStats: async () => {
+    const response = await apiClient.get('/tpcell/stats/');
     return response.data;
   },
 };

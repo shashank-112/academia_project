@@ -1,0 +1,318 @@
+/* ===== MAIN DASHBOARD LAYOUT ===== */
+.mgmt-dashboard-wrapper {
+  display: flex;
+  height: 100vh;
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== SIDEBAR STYLING ===== */
+.mgmt-sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.mgmt-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mgmt-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mgmt-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 10px;
+}
+
+.mgmt-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.4);
+}
+
+/* ===== SIDEBAR LOGO ===== */
+.mgmt-sidebar-logo {
+  padding: 0 1.25rem 1.5rem 1.25rem;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.mgmt-sidebar-logo h3 {
+  margin: 0;
+  color: #667eea;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* ===== SIDEBAR NAVIGATION ===== */
+.mgmt-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+}
+
+.mgmt-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #666;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mgmt-nav-icon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.mgmt-nav-label {
+  flex: 1;
+  text-align: left;
+}
+
+/* ===== NAV ITEM HOVER STATE ===== */
+.mgmt-nav-item:hover {
+  background: #f5f7fa;
+  color: #667eea;
+  padding-left: 1.5rem;
+}
+
+.mgmt-nav-item:hover .mgmt-nav-icon {
+  transform: scale(1.15);
+}
+
+/* ===== NAV ITEM ACTIVE STATE ===== */
+.mgmt-nav-item.mgmt-active {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  color: #667eea;
+  font-weight: 600;
+}
+
+.mgmt-nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mgmt-nav-item.mgmt-active .mgmt-nav-indicator {
+  opacity: 1;
+}
+
+/* ===== MAIN CONTENT AREA ===== */
+.mgmt-main-content {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== TOP NAVBAR ===== */
+.mgmt-navbar {
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  animation: mgmt-slideDown 0.4s ease-out;
+}
+
+@keyframes mgmt-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== NAVBAR TITLE ===== */
+.mgmt-navbar-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ===== NAVBAR RIGHT SECTION ===== */
+.mgmt-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mgmt-user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mgmt-user-info h4 {
+  margin: 0;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mgmt-user-info p {
+  margin: 0;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.mgmt-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.mgmt-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.mgmt-logout-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  font-size: 0.95rem;
+}
+
+.mgmt-logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.mgmt-logout-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== PAGE CONTENT AREA ===== */
+.mgmt-page-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #f8f9fa;
+}
+
+.mgmt-page-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.mgmt-page-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mgmt-page-container::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 10px;
+}
+
+.mgmt-page-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.4);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mgmt-sidebar {
+    transform: translateX(-100%);
+    width: 240px;
+  }
+
+  .mgmt-sidebar.mgmt-open {
+    transform: translateX(0);
+  }
+
+  .mgmt-main-content {
+    margin-left: 0;
+  }
+
+  .mgmt-navbar {
+    padding: 0 1rem;
+  }
+
+  .mgmt-navbar-title {
+    font-size: 1.2rem;
+  }
+
+  .mgmt-navbar-right {
+    gap: 1rem;
+  }
+
+  .mgmt-user-info {
+    display: none;
+  }
+
+  .mgmt-page-container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mgmt-navbar-right {
+    gap: 0.5rem;
+  }
+
+  .mgmt-logout-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .mgmt-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

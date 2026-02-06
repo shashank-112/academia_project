@@ -1,0 +1,131 @@
+/* ===== TP CELL NAVBAR ===== */
+
+.tpcell-navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: slideDown 0.4s ease-out;
+}
+
+.tpcell-navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+}
+
+/* Brand Section */
+.tpcell-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tpcell-app-icon {
+  font-size: 1.8rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.tpcell-app-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Profile Section */
+.tpcell-navbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.tpcell-navbar-profile:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tpcell-user-info {
+  text-align: right;
+}
+
+.tpcell-user-name {
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.tpcell-user-role {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.tpcell-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.tpcell-navbar-profile:hover .tpcell-avatar {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .tpcell-navbar {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .tpcell-app-icon {
+    font-size: 1.5rem;
+  }
+
+  .tpcell-app-name {
+    font-size: 1.2rem;
+  }
+
+  .tpcell-user-info {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tpcell-navbar {
+    padding: 0.7rem 1rem;
+  }
+
+  .tpcell-navbar-container {
+    gap: 1rem;
+  }
+
+  .tpcell-app-name {
+    font-size: 1rem;
+  }
+
+  .tpcell-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+}

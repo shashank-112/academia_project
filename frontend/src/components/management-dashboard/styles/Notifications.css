@@ -1,0 +1,252 @@
+/* ===== NOTIFICATIONS PAGE STYLES ===== */
+
+.mgmt-notifications-container {
+  animation: mgmt-fadeIn 0.5s ease-out;
+}
+
+/* ===== CREATE NOTIFICATION FORM ===== */
+.mgmt-create-notification {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mgmt-create-notification h2 {
+  color: #333;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+}
+
+.mgmt-notification-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mgmt-notification-form-full {
+  grid-column: 1 / -1;
+}
+
+.mgmt-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.mgmt-form-group input,
+.mgmt-form-group select,
+.mgmt-form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.mgmt-form-group input:focus,
+.mgmt-form-group select:focus,
+.mgmt-form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.mgmt-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.mgmt-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.mgmt-btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.mgmt-btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.mgmt-btn-reset {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mgmt-btn-reset:hover {
+  background: #f5f7fa;
+}
+
+/* ===== NOTIFICATIONS LIST ===== */
+.mgmt-notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mgmt-notification-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+  animation: mgmt-slideIn 0.5s ease-out;
+}
+
+.mgmt-notification-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateX(4px);
+}
+
+.mgmt-notification-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.mgmt-notification-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.mgmt-notification-sent-time {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.mgmt-notification-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mgmt-notification-type {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mgmt-notification-type.fee {
+  background: #fff3e0;
+  color: #f57f17;
+}
+
+.mgmt-notification-type.general {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.mgmt-notification-type.academic {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.mgmt-notification-type.administrative {
+  background: #fce4ec;
+  color: #ad1457;
+}
+
+.mgmt-notification-target {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.mgmt-notification-description {
+  color: #666;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.mgmt-notification-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.mgmt-due-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.mgmt-priority {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mgmt-priority.high {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.mgmt-priority.medium {
+  background: #fff3e0;
+  color: #f57f17;
+}
+
+.mgmt-priority.low {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mgmt-create-notification {
+    padding: 1.5rem;
+  }
+
+  .mgmt-notification-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mgmt-notification-card {
+    padding: 1rem;
+  }
+
+  .mgmt-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .mgmt-btn-submit,
+  .mgmt-btn-reset {
+    width: 100%;
+  }
+}

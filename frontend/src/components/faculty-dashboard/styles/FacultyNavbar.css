@@ -1,0 +1,133 @@
+/* ===== FACULTY NAVBAR ===== */
+
+.faculty-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+  padding: 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.faculty-navbar-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.faculty-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.3px;
+}
+
+.faculty-app-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.faculty-app-name {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.faculty-navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.faculty-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.faculty-user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.2px;
+}
+
+.faculty-user-role {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.faculty-user-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.faculty-user-avatar:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .faculty-navbar-container {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .faculty-app-name {
+    display: none;
+  }
+
+  .faculty-user-info {
+    display: none;
+  }
+
+  .faculty-user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faculty-navbar-container {
+    padding: 0.75rem 1rem;
+    height: 60px;
+  }
+
+  .faculty-app-icon {
+    font-size: 1.5rem;
+  }
+
+  .faculty-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,294 @@
+/* ===== STUDENTS PAGE STYLES ===== */
+
+.mgmt-students-container {
+  animation: mgmt-fadeIn 0.5s ease-out;
+}
+
+/* ===== FILTER SECTION ===== */
+.mgmt-students-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== STUDENT LIST CONTAINER ===== */
+.mgmt-student-list-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ===== STUDENT LIST TABLE ===== */
+.mgmt-student-list {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mgmt-student-table-header {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.mgmt-student-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mgmt-student-row:hover {
+  background: #f5f7fa;
+}
+
+.mgmt-student-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.mgmt-student-roll {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.mgmt-student-info {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* ===== FEE STATUS BADGE ===== */
+.mgmt-fee-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.mgmt-fee-status.paid {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.mgmt-fee-status.pending {
+  background: #fff3e0;
+  color: #f57f17;
+}
+
+/* ===== STUDENT DETAIL PANEL ===== */
+.mgmt-student-detail-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 10px;
+  animation: mgmt-slideUp 0.5s ease-out;
+}
+
+.mgmt-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.mgmt-detail-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.mgmt-detail-header-info h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.mgmt-detail-header-info p {
+  margin: 0;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* ===== PERSONAL INFO SECTION ===== */
+.mgmt-detail-section {
+  margin-bottom: 1.5rem;
+}
+
+.mgmt-detail-section h4 {
+  color: #333;
+  font-size: 0.95rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.mgmt-detail-item {
+  margin-bottom: 0.75rem;
+}
+
+.mgmt-detail-label {
+  color: #888;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.mgmt-detail-value {
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* ===== FEE BREAKDOWN ===== */
+.mgmt-fee-breakdown {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+.mgmt-fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.mgmt-fee-item:last-child {
+  margin-bottom: 0;
+}
+
+.mgmt-fee-label {
+  color: #666;
+}
+
+.mgmt-fee-amount {
+  color: #333;
+  font-weight: 600;
+}
+
+/* ===== EMPTY STATE ===== */
+.mgmt-empty-detail {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.mgmt-empty-detail p {
+  color: #999;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ===== LOADING STATE ===== */
+.mgmt-student-skeleton {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mgmt-skeleton-item {
+  height: 20px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: mgmt-shimmer 1.5s infinite;
+}
+
+@keyframes mgmt-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .mgmt-student-list-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .mgmt-student-detail-panel {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .mgmt-students-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mgmt-student-table-header,
+  .mgmt-student-row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .mgmt-student-roll {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mgmt-students-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .mgmt-student-table-header,
+  .mgmt-student-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mgmt-student-info {
+    display: none;
+  }
+
+  .mgmt-detail-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .mgmt-detail-section h4 {
+    font-size: 0.85rem;
+  }
+}

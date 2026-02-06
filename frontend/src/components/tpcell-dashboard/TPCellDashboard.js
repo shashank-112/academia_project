@@ -1,76 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { tpcellService } from '../../services/api';
-import '../Dashboard.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import TPCellNavbar from './shared/TPCellNavbar';
+import TPCellSidebar from './shared/TPCellSidebar';
+import Home from './pages/Home';
+import Students from './pages/Students';
+import Notifications from './pages/Notifications';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import './styles/Common.css';
+import './styles/TPCellLayout.css';
 
 const TPCellDashboard = () => {
-  const { user, logout } = useAuth();
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="page-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading TP Cell portal...</p>
+      </div>
+    );
+  }
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const profileData = await tpcellService.getProfile();
-      setProfile(profileData);
-    } catch (err) {
-      setError('Failed to load TP Cell data');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <div className="dashboard-loading">Loading...</div>;
+  if (!user || user.role !== 'tpcell') {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
-    <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>💼 TP Cell Dashboard</h1>
-        <button onClick={logout} className="logout-btn">Logout</button>
-      </header>
-
-      {error && <div className="error-alert">{error}</div>}
-
-      <main className="dashboard-content">
-        <section className="dashboard-section">
-          <h2>Profile Information</h2>
-          {profile && (
-            <div className="info-grid">
-              <div className="info-item">
-                <label>Employee ID</label>
-                <p>{profile.emp_id}</p>
-              </div>
-              <div className="info-item">
-                <label>Name</label>
-                <p>{profile.first_name} {profile.last_name}</p>
-              </div>
-              <div className="info-item">
-                <label>Email</label>
-                <p>{profile.email}</p>
-              </div>
-              <div className="info-item">
-                <label>Designation</label>
-                <p>{profile.designation}</p>
-              </div>
-            </div>
-          )}
-        </section>
-
-        <section className="dashboard-section">
-          <h2>TP Cell Activities</h2>
-          <div className="actions-grid">
-            <button className="action-btn">🎯 Campus Drives</button>
-            <button className="action-btn">📈 Placement Stats</button>
-            <button className="action-btn">👥 Student Profiles</button>
-          </div>
-        </section>
-      </main>
+    <div className="tpcell-dashboard-container">
+      <TPCellNavbar user={user} />
+      <div className="tpcell-main-wrapper">
+        <TPCellSidebar />
+        <main className="tpcell-main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/students" element={<Students />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 };

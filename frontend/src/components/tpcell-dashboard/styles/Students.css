@@ -1,0 +1,315 @@
+/* ===== TP CELL STUDENTS PAGE ===== */
+
+.tpcell-students {
+  animation: pageAnimation 0.5s ease-out;
+}
+
+/* Filters Section */
+.filters-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8ecf5;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 180px;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #e8ecf5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-group select:hover {
+  border-color: #667eea;
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.1);
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 12px rgba(102, 126, 234, 0.2);
+}
+
+.apply-filters-btn {
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.apply-filters-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.apply-filters-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Students Section */
+.students-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8ecf5;
+  animation: fadeInUp 0.5s ease-out 0.15s both;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+.students-table-wrapper {
+  overflow-x: auto;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table thead {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-bottom: 2px solid #e8ecf5;
+}
+
+.students-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.students-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e8ecf5;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.students-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.students-table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+}
+
+.backlog-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.backlog-badge.yes {
+  background: #ffe8e8;
+  color: #e74c3c;
+}
+
+.backlog-badge.no {
+  background: #e8f5e9;
+  color: #27ae60;
+}
+
+.view-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Student Detail Section */
+.student-detail-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 2px solid #667eea;
+  animation: slideUp 0.4s ease-out;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e8ecf5;
+}
+
+.detail-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #e74c3c;
+  transform: rotate(90deg);
+}
+
+.detail-content {
+  display: grid;
+  gap: 2rem;
+}
+
+.detail-group {
+  border-left: 4px solid #667eea;
+  padding-left: 1.5rem;
+}
+
+.detail-group h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.detail-item {
+  margin-bottom: 1rem;
+}
+
+.detail-item label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.detail-item p {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 500;
+}
+
+.backlogs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.backlogs-list li {
+  padding: 0.5rem 1rem;
+  background: #ffe8e8;
+  border-left: 3px solid #e74c3c;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.no-backlogs {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .apply-filters-btn {
+    width: 100%;
+  }
+
+  .students-table {
+    font-size: 0.85rem;
+  }
+
+  .students-table th,
+  .students-table td {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .students-table {
+    font-size: 0.8rem;
+  }
+
+  .students-table th,
+  .students-table td {
+    padding: 0.6rem;
+  }
+
+  .detail-content {
+    gap: 1.5rem;
+  }
+}

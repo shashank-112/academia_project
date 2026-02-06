@@ -1,0 +1,131 @@
+/* ===== FACULTY PROFILE PAGE ===== */
+
+.faculty-profile {
+  animation: pageAnimation 0.5s ease-out;
+}
+
+.profile-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid #e8ecf5;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  animation: slideUp 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.profile-section:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.2px;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e8ecf5;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.profile-item {
+  padding: 1.25rem;
+  background: #f8f9ff;
+  border-radius: 10px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.profile-item:hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.profile-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.profile-item label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.75rem;
+}
+
+.profile-item p {
+  margin: 0;
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.change-password-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.change-password-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .profile-section {
+    padding: 1.5rem;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .profile-item label {
+    font-size: 0.8rem;
+  }
+
+  .profile-item p {
+    font-size: 0.95rem;
+  }
+
+  .change-password-btn {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+  }
+}

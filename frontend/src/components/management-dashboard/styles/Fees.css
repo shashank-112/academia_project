@@ -1,0 +1,172 @@
+/* ===== FEES PAGE STYLES ===== */
+
+.mgmt-fees-container {
+  animation: mgmt-fadeIn 0.5s ease-out;
+}
+
+/* ===== FEE SUMMARY CARDS ===== */
+.mgmt-fee-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.mgmt-fee-summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #667eea;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: mgmt-cardSlideIn 0.5s ease-out;
+}
+
+.mgmt-fee-summary-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.mgmt-fee-summary-card h3 {
+  margin: 0 0 0.75rem 0;
+  color: #888;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.mgmt-fee-amount {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.mgmt-fee-change {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+/* ===== FEE COLLECTION PROGRESS ===== */
+.mgmt-fee-progress {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mgmt-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.mgmt-progress-label h4 {
+  margin: 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.mgmt-progress-percent {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.mgmt-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mgmt-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== FEE TABLE ===== */
+.mgmt-fee-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mgmt-fee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mgmt-fee-table thead {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.mgmt-fee-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 0.95rem;
+}
+
+.mgmt-fee-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.mgmt-fee-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.mgmt-fee-table tbody tr:hover {
+  background: #f5f7fa;
+}
+
+.mgmt-fee-status-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mgmt-fee-status-badge.paid {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.mgmt-fee-status-badge.pending {
+  background: #fff3e0;
+  color: #f57f17;
+}
+
+.mgmt-fee-amount-text {
+  color: #333;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mgmt-fee-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mgmt-fee-table {
+    font-size: 0.85rem;
+  }
+
+  .mgmt-fee-table th,
+  .mgmt-fee-table td {
+    padding: 0.75rem;
+  }
+}

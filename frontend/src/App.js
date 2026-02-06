@@ -38,6 +38,16 @@ function AppRoutes() {
       />
       
       <Route
+        path="/faculty/*"
+        element={
+          <PrivateRoute requiredRole="faculty">
+            <FacultyDashboard />
+          </PrivateRoute>
+        }
+      />
+      
+      {/* Keep backward compatibility with old route */}
+      <Route
         path="/dashboard/faculty"
         element={
           <PrivateRoute requiredRole="faculty">
@@ -55,6 +65,16 @@ function AppRoutes() {
         }
       />
       
+      <Route
+        path="/tpcell/*"
+        element={
+          <PrivateRoute requiredRole="tpcell">
+            <TPCellDashboard />
+          </PrivateRoute>
+        }
+      />
+      
+      {/* Keep backward compatibility with old route */}
       <Route
         path="/dashboard/tpcell"
         element={

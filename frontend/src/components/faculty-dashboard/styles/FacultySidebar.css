@@ -1,0 +1,217 @@
+/* ===== FACULTY SIDEBAR ===== */
+
+.faculty-sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px;
+  width: 250px;
+  height: calc(100vh - 70px);
+  background: white;
+  border-right: 2px solid #e8ecf5;
+  overflow-y: auto;
+  z-index: 99;
+  box-shadow: 2px 0 8px rgba(102, 126, 234, 0.08);
+}
+
+.faculty-sidebar-content {
+  padding: 1.5rem 0;
+}
+
+.faculty-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+}
+
+.faculty-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+  color: #666;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.2px;
+}
+
+.faculty-menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 10px 10px 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease;
+}
+
+.faculty-menu-item:hover {
+  background: #f8f9ff;
+  color: #667eea;
+  transform: translateX(4px);
+  padding-left: 1.25rem;
+}
+
+.faculty-menu-item:hover::before {
+  transform: scaleY(1);
+}
+
+.faculty-menu-item.active {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+  color: #667eea;
+  border-radius: 12px;
+}
+
+.faculty-menu-item.active::before {
+  transform: scaleY(1);
+}
+
+.faculty-menu-icon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+}
+
+.faculty-menu-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.faculty-menu-indicator {
+  position: absolute;
+  right: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* Scrollbar styling */
+.faculty-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.faculty-sidebar::-webkit-scrollbar-track {
+  background: #f5f7fa;
+}
+
+.faculty-sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.faculty-sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .faculty-sidebar {
+    width: 220px;
+  }
+
+  .faculty-menu-item {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .faculty-menu-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faculty-sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 2px solid #e8ecf5;
+    overflow-x: auto;
+    z-index: 97;
+  }
+
+  .faculty-sidebar-content {
+    padding: 0;
+  }
+
+  .faculty-menu {
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+  }
+
+  .faculty-menu-item {
+    min-width: 90px;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .faculty-menu-item::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: 3px;
+    border-radius: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .faculty-menu-item:hover::before {
+    transform: scaleX(1);
+  }
+
+  .faculty-menu-item.active::before {
+    transform: scaleX(1);
+  }
+
+  .faculty-menu-label {
+    font-size: 0.75rem;
+  }
+
+  .faculty-menu-icon {
+    font-size: 1.1rem;
+    min-width: auto;
+  }
+
+  .faculty-menu-indicator {
+    display: none;
+  }
+
+  .faculty-sidebar::-webkit-scrollbar {
+    height: 4px;
+  }
+}

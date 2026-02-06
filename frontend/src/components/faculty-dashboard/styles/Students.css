@@ -1,0 +1,86 @@
+/* ===== FACULTY STUDENTS PAGE ===== */
+
+.faculty-students {
+  animation: pageAnimation 0.5s ease-out;
+}
+
+.filters-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border: 2px solid #e8ecf5;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  animation: slideDown 0.5s ease-out;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.filter-group select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e8ecf5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #555;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.filter-group select:hover {
+  border-color: #667eea;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.students-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .filters-section {
+    padding: 1.5rem;
+  }
+
+  .filter-group {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-section {
+    padding: 1rem;
+  }
+
+  .filter-group label {
+    font-size: 0.85rem;
+  }
+
+  .filter-group select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}

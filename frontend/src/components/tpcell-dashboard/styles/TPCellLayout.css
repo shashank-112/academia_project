@@ -1,0 +1,97 @@
+/* ===== TP CELL DASHBOARD LAYOUT ===== */
+
+.tpcell-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9ff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  color: #2c3e50;
+}
+
+.tpcell-main-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tpcell-main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #f8f9ff 0%, #f0f2ff 100%);
+  animation: pageAnimation 0.5s ease-out;
+}
+
+/* Scrollbar Styling */
+.tpcell-main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tpcell-main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tpcell-main-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.tpcell-main-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 2.5rem;
+  animation: slideDown 0.4s ease-out;
+}
+
+.page-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.page-header p {
+  color: #888;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .tpcell-main-wrapper {
+    flex-direction: column;
+  }
+
+  .tpcell-main-content {
+    padding: 1.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tpcell-main-content {
+    padding: 1rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.3rem;
+  }
+}

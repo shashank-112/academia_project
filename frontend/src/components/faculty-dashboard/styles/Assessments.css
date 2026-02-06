@@ -1,0 +1,81 @@
+/* ===== FACULTY ASSESSMENTS PAGE ===== */
+
+.faculty-assessments {
+  animation: pageAnimation 0.5s ease-out;
+}
+
+.selection-section {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border: 2px solid #e8ecf5;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  animation: slideDown 0.5s ease-out;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.selection-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.selection-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.selection-group select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e8ecf5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #555;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.selection-group select:hover {
+  border-color: #667eea;
+}
+
+.selection-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.marks-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .selection-section {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selection-section {
+    padding: 1rem;
+  }
+
+  .selection-group label {
+    font-size: 0.85rem;
+  }
+
+  .selection-group select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}

@@ -54,6 +54,7 @@ if students_csv.exists():
                 first_name=str(row['first_name'])[:30],
                 last_name=str(row['last_name'])[:30],
                 role='student',
+                user_id=int(row['student_id']),
                 password=make_password(password)
             ))
         
@@ -247,6 +248,7 @@ if faculty_csv.exists():
                 first_name=str(row['first_name'])[:30],
                 last_name=str(row['last_name'])[:30],
                 role='faculty',
+                user_id=int(row['faculty_id']),
                 password=make_password(password)
             ))
         
@@ -353,6 +355,7 @@ if tpcell_csv.exists():
                 first_name=str(row['first_name'])[:30],
                 last_name=str(row['last_name'])[:30],
                 role='tpcell',
+                user_id=int(row['emp_id']),
                 password=make_password(password)
             ))
         
@@ -413,6 +416,7 @@ if mgmt_csv.exists():
                 first_name=str(row['first_name'])[:30],
                 last_name=str(row['last_name'])[:30],
                 role='management',
+                user_id=int(row['emp_id']),
                 password=make_password(password)
             ))
         

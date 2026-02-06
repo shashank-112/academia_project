@@ -1,0 +1,88 @@
+/* ===== FACULTY DASHBOARD LAYOUT ===== */
+
+.faculty-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f8f9ff;
+  overflow: hidden;
+}
+
+.faculty-main-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.faculty-main-content {
+  flex: 1;
+  margin-left: 250px;
+  margin-top: 70px;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #f8f9ff;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.faculty-main-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.faculty-main-content::-webkit-scrollbar-track {
+  background: #f0f2f8;
+}
+
+.faculty-main-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.faculty-main-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ===== PAGE LOADING ===== */
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  gap: 2rem;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .faculty-main-content {
+    margin-left: 200px;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faculty-main-wrapper {
+    flex-direction: column;
+  }
+
+  .faculty-main-content {
+    margin-left: 0;
+    margin-top: 140px;
+    padding: 1rem;
+  }
+}
