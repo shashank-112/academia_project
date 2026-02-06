@@ -91,7 +91,7 @@ export const managementService = {
   },
   getStudentCount: async () => {
     const response = await apiClient.get('/management/students/count/');
-    return response.data;
+    return response.data && typeof response.data === 'object' && response.data.total !== undefined ? response.data.total : response.data;
   },
 
   // Faculty Management
@@ -101,7 +101,7 @@ export const managementService = {
   },
   getFacultyCount: async () => {
     const response = await apiClient.get('/management/faculty/count/');
-    return response.data;
+    return response.data && typeof response.data === 'object' && response.data.total !== undefined ? response.data.total : response.data;
   },
 
   // Fee Management

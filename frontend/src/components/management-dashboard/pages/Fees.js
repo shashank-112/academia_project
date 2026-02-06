@@ -16,6 +16,21 @@ const Fees = () => {
   const branches = ['CSE', 'ECE', 'Mechanical', 'Civil'];
   const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 
+  // ID mappings for filters
+  const yearToId = {
+    '1st Year': '1',
+    '2nd Year': '2',
+    '3rd Year': '3',
+    '4th Year': '4'
+  };
+  
+  const branchToId = {
+    'CSE': '1',
+    'ECE': '2',
+    'Mechanical': '3',
+    'Civil': '4'
+  };
+
   useEffect(() => {
     loadFeeData();
   }, [filters]);
@@ -23,16 +38,67 @@ const Fees = () => {
   const loadFeeData = async () => {
     try {
       setLoading(true);
+      setError('');
+      
+      // Get fee summary (no filters needed for this)
+      console.log('Fetching fee summary...');
       const summary = await managementService.getFeeSummary();
-      const details = await managementService.getStudentFeeDetails(filters);
-
-      setFeeData(summary || {
-        expectedFee: 45000000,
-        collectedFee: 30000000,
-        pendingFee: 15000000
-      });
-
-      setStudentFees(details || [
+      console.log('Fee summary response:', summary);
+      
+      // Validate and set fee data
+      if (summary && typeof summary === 'object') {
+        // Ensure all values are numbers
+        const safeData = {
+          expectedFee: Number(summary.expectedFee) || 0,
+          collectedFee: Number(summary.collectedFee) || 0,
+          pendingFee: Number(summary.pendingFee) || 0
+        };
+        console.log('Safe fee data:', safeData);
+        setFeeData(safeData);
+      } else {
+        console.warn('Invalid fee summary format, using defaults');
+        setFeeData({
+          expectedFee: 0,
+          collectedFee: 0,
+          pendingFee: 0
+        });
+      }
+      
+      // Get student fee details with filters
+      const apiFilters = {};
+      if (filters.year) {
+        const yearId = yearToId[filters.year];
+        if (yearId) apiFilters.year = yearId;
+        console.log('Filter: year', filters.year, '-> ID:', yearId);
+      }
+      if (filters.branch) {
+        const branchId = branchToId[filters.branch];
+        if (branchId) apiFilters.branch = branchId;
+        console.log('Filter: branch', filters.branch, '-> ID:', branchId);
+      }
+      
+      console.log('Fetching student fee details with filters:', apiFilters);
+      const details = await managementService.getStudentFeeDetails(apiFilters);
+      console.log('Fee details response count:', Array.isArray(details) ? details.length : 'not an array');
+      
+      // Map and validate fee details
+      if (details && Array.isArray(details) && details.length > 0) {
+        const mapped = details.map(fee => ({
+          id: fee.id,
+          name: fee.name || '',
+          rollNo: fee.roll_no || '',
+          admissionMode: fee.admissionMode || 'Regular',
+          paidAmount: Number(fee.paidAmount) || 0,
+          remainingAmount: Number(fee.remainingAmount) || 0,
+          libraryFine: Number(fee.libraryFine) || 0,
+          equipmentFine: Number(fee.equipmentFine) || 0,
+          status: fee.status || 'Pending'
+        }));
+        console.log('Mapped', mapped.length, 'fee records');
+        setStudentFees(mapped);
+      } else {
+        console.warn('No fee details returned or invalid format');
+        setStudentFees([
         {
           id: 1,
           name: 'John Doe',
@@ -89,13 +155,38 @@ const Fees = () => {
           status: 'Pending'
         }
       ]);
-    } catch (err) {
-      console.error('Error loading fee data:', err);
-      setError('Failed to load fee data');
+    }
+  } catch (err) {
+      console.error('ERROR LOADING FEE DATA');
+      console.error('Exception:', err);
+      
+      let errorMessage = 'Failed to load fee data';
+      
+      // Try to extract error message from API response
+      if (err.response) {
+        console.error('HTTP Status:', err.response.status);
+        console.error('Error Data:', err.response.data);
+        if (err.response.data && err.response.data.error) {
+          errorMessage = `API Error: ${err.response.data.error}`;
+        } else if (err.response.status === 404) {
+          errorMessage = 'Employee record not found in the system. Please contact administrator.';
+        } else if (err.response.status === 500) {
+          errorMessage = 'Server error while loading fee data. Please check logs or contact administrator.';
+        }
+      } else if (err.request) {
+        console.error('No response received from server');
+        errorMessage = 'No response from server - connection issue. Check if backend is running.';
+      } else if (err.message) {
+        console.error('Error Message:', err.message);
+        errorMessage = `Error: ${err.message}`;
+      }
+      
+      console.error('Final error message:', errorMessage);
+      setError(errorMessage);
       setFeeData({
-        expectedFee: 45000000,
-        collectedFee: 30000000,
-        pendingFee: 15000000
+        expectedFee: 0,
+        collectedFee: 0,
+        pendingFee: 0
       });
       setStudentFees([]);
     } finally {

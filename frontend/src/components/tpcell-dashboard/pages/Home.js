@@ -26,8 +26,21 @@ const Home = () => {
       setStats(statsData);
       setNotifications(notificationsData.slice(0, 5));
     } catch (err) {
-      setError('Failed to load TP Cell portal data');
-      console.error(err);
+      console.error('ERROR LOADING TP CELL DATA:', err);
+      
+      let errorMsg = 'Failed to load TP Cell portal data';
+      if (err.response && err.response.data && err.response.data.error) {
+        errorMsg = err.response.data.error;
+      } else if (err.response && err.response.status === 404) {
+        errorMsg = 'Employee record not found. Make sure you have a valid TP Cell profile in the system.';
+      } else if (err.response && err.response.status === 500) {
+        errorMsg = 'Server error. Please check backend logs or contact administrator.';
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      
+      console.error('Final error:', errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

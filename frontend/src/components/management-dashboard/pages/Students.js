@@ -18,6 +18,27 @@ const Students = () => {
   const [sections, setSections] = useState(['A', 'B', 'C']);
   const [years, setYears] = useState(['1st Year', '2nd Year', '3rd Year', '4th Year']);
 
+  // ID mappings for filters
+  const yearToId = {
+    '1st Year': '1',
+    '2nd Year': '2',
+    '3rd Year': '3',
+    '4th Year': '4'
+  };
+  
+  const branchToId = {
+    'CSE': '1',
+    'ECE': '2',
+    'Mechanical': '3',
+    'Civil': '4'
+  };
+  
+  const sectionToId = {
+    'A': '1',
+    'B': '2',
+    'C': '3'
+  };
+
   useEffect(() => {
     loadStudents();
   }, [filters]);
@@ -25,15 +46,77 @@ const Students = () => {
   const loadStudents = async () => {
     try {
       setLoading(true);
-      const data = await managementService.getAllStudents(filters);
-      setStudents(data || []);
-      if (data && data.length > 0) {
-        setSelectedStudent(data[0]);
+      setError('');
+      
+      // Build filters object - only include non-empty values
+      const apiFilters = {};
+      if (filters.year) {
+        const yearId = yearToId[filters.year];
+        if (yearId) apiFilters.year = yearId;
+        console.log('Filter: year', filters.year, '-> ID:', yearId);
       }
+      if (filters.branch) {
+        const branchId = branchToId[filters.branch];
+        if (branchId) apiFilters.branch = branchId;
+        console.log('Filter: branch', filters.branch, '-> ID:', branchId);
+      }
+      if (filters.section) {
+        const sectionId = sectionToId[filters.section];
+        if (sectionId) apiFilters.section = sectionId;
+        console.log('Filter: section', filters.section, '-> ID:', sectionId);
+      }
+      
+      console.log('Making API call with filters:', apiFilters);
+      const data = await managementService.getAllStudents(apiFilters);
+      
+      // Check if data is valid
+      if (!data) {
+        console.error('API returned null or undefined');
+        setStudents([]);
+        setSelectedStudent(null);
+        setLoading(false);
+        return;
+      }
+      
+      if (!Array.isArray(data)) {
+        console.error('API returned non-array response:', typeof data);
+        setStudents([]);
+        setSelectedStudent(null);
+        setLoading(false);
+        return;
+      }
+      
+      console.log('API returned', data.length, 'students');
+      setStudents(data);
+      setSelectedStudent(data.length > 0 ? data[0] : null);
+      setLoading(false);
+      
     } catch (err) {
-      console.error('Error loading students:', err);
-      setError('Failed to load students');
-      // Demo data
+      console.error('ERROR LOADING STUDENTS');
+      console.error('Exception:', err);
+      if (err.response) {
+        console.error('HTTP Status:', err.response.status);
+        console.error('Error Data:', err.response.data);
+      }
+      if (err.request) {
+        console.error('No response received from server');
+      }
+      if (err.message) {
+        console.error('Error Message:', err.message);
+      }
+      
+      // Extract error message from response
+      let errorMsg = 'Failed to load students';
+      if (err.response && err.response.data && err.response.data.error) {
+        errorMsg = err.response.data.error;
+      } else if (err.response && err.response.status === 404) {
+        errorMsg = 'Employee record not found. Please contact administrator.';
+      } else if (err.response && err.response.status === 500) {
+        errorMsg = 'Server error while loading students. Check backend logs.';
+      }
+      
+      // IMPORTANT: Still try loading demo data even if error
+      setError(`${errorMsg} - using demo data`);
       setStudents([
         {
           id: 1,
@@ -113,12 +196,8 @@ const Students = () => {
     setFilters({...filters, [field]: value});
   };
 
-  const filteredStudents = students.filter(student => {
-    if (filters.year && student.year !== filters.year) return false;
-    if (filters.branch && student.branch !== filters.branch) return false;
-    if (filters.section && student.section !== filters.section) return false;
-    return true;
-  });
+  // Use the data as-is from the API (already filtered by backend)
+  const displayedStudents = students;
 
   if (loading) {
     return (
@@ -174,7 +253,7 @@ const Students = () => {
             <div>Phone</div>
             <div>Fee Status</div>
           </div>
-          {filteredStudents.map((student) => (
+          {displayedStudents.map((student) => (
             <div
               key={student.id}
               className="mgmt-student-row"
@@ -182,12 +261,12 @@ const Students = () => {
               style={{opacity: selectedStudent?.id === student.id ? 1 : 0.7}}
             >
               <div className="mgmt-student-name">{student.name}</div>
-              <div className="mgmt-student-roll">{student.rollNo}</div>
+              <div className="mgmt-student-roll">{student.roll_no}</div>
               <div className="mgmt-student-info">{student.branch} / {student.year}</div>
               <div className="mgmt-student-info">{student.phone}</div>
               <div>
-                <span className={`mgmt-fee-status ${student.feeStatus.toLowerCase()}`}>
-                  {student.feeStatus === 'Paid' ? '✓' : '⏳'} {student.feeStatus}
+                <span className="mgmt-fee-status pending">
+                  ⏳ View Details
                 </span>
               </div>
             </div>
@@ -219,6 +298,10 @@ const Students = () => {
                 <div className="mgmt-detail-value">{selectedStudent.phone}</div>
               </div>
               <div className="mgmt-detail-item">
+                <div className="mgmt-detail-label">Roll No</div>
+                <div className="mgmt-detail-value">{selectedStudent.roll_no}</div>
+              </div>
+              <div className="mgmt-detail-item">
                 <div className="mgmt-detail-label">Branch</div>
                 <div className="mgmt-detail-value">{selectedStudent.branch}</div>
               </div>
@@ -235,37 +318,7 @@ const Students = () => {
             {/* Fee Breakdown */}
             <div className="mgmt-detail-section">
               <h4>Fee Details</h4>
-              <div className="mgmt-fee-breakdown">
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">Total Fee:</span>
-                  <span className="mgmt-fee-amount">₹{selectedStudent.totalFee?.toLocaleString()}</span>
-                </div>
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">Paid Amount:</span>
-                  <span className="mgmt-fee-amount">₹{selectedStudent.paidAmount?.toLocaleString()}</span>
-                </div>
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">Remaining:</span>
-                  <span className="mgmt-fee-amount">₹{selectedStudent.remainingAmount?.toLocaleString()}</span>
-                </div>
-              </div>
-
-              <div className="mgmt-fee-breakdown" style={{marginTop: '1rem'}}>
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">Library Fine:</span>
-                  <span className="mgmt-fee-amount">₹{selectedStudent.libraryFine}</span>
-                </div>
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">Equipment Fine:</span>
-                  <span className="mgmt-fee-amount">₹{selectedStudent.equipmentFine}</span>
-                </div>
-                <div className="mgmt-fee-item">
-                  <span className="mgmt-fee-label">CRT Fee:</span>
-                  <span className={`mgmt-fee-amount ${selectedStudent.crtFeeStatus?.toLowerCase()}`}>
-                    {selectedStudent.crtFeeStatus}
-                  </span>
-                </div>
-              </div>
+              <p style={{color: '#999', fontSize: '0.9rem'}}>Fee details available in the Fees tab</p>
             </div>
           </div>
         ) : (
