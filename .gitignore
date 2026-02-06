@@ -1,0 +1,44 @@
+# =========================
+# Python / Django
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django secrets & local config
+.env
+.env.*
+*.env
+
+# Django database (SQLite only — safe even if unused)
+db.sqlite3
+
+# =========================
+# Conda / Virtual Environments
+# =========================
+academia_project/
+env/
+venv/
+.venv/
+
+# =========================
+# React / Node
+# =========================
+node_modules/
+build/
+dist/
+
+# =========================
+# Logs & temp files
+# =========================
+*.log
+*.tmp
+
+# =========================
+# Editor / OS
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
