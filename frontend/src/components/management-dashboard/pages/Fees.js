@@ -202,15 +202,6 @@ const Fees = () => {
     ? Math.round((feeData.collectedFee / feeData.expectedFee) * 100)
     : 0;
 
-  if (loading) {
-    return (
-      <div className="mgmt-page-loading">
-        <div className="mgmt-loading-spinner"></div>
-        <p>Loading fee information...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="mgmt-fees-container">
       {error && <div className="mgmt-error-banner">{error}</div>}

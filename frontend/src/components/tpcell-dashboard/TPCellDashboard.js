@@ -14,15 +14,6 @@ import './styles/TPCellLayout.css';
 const TPCellDashboard = () => {
   const { user, isLoading } = useAuth();
 
-  if (isLoading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading TP Cell portal...</p>
-      </div>
-    );
-  }
-
   if (!user || user.role !== 'tpcell') {
     return <Navigate to="/login" replace />;
   }

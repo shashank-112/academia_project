@@ -16,15 +16,6 @@ import './styles/FacultyLayout.css';
 const FacultyDashboard = () => {
   const { user, isLoading } = useAuth();
 
-  if (isLoading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading faculty portal...</p>
-      </div>
-    );
-  }
-
   if (!user || user.role !== 'faculty') {
     return <Navigate to="/login" replace />;
   }
@@ -34,7 +25,7 @@ const FacultyDashboard = () => {
       <FacultyNavbar user={user} />
       <div className="faculty-main-wrapper">
         <FacultySidebar />
-        <main className="faculty-main-content">
+        <main  style={{ marginTop: "0px" }} className="faculty-main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />

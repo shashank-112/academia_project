@@ -19,10 +19,6 @@ const Sidebar = ({ activePage, onPageChange, isOpen, onClose }) => {
 
   return (
     <div className={`mgmt-sidebar ${isOpen ? 'mgmt-open' : ''}`}>
-      <div className="mgmt-sidebar-logo">
-        <h3>Academia</h3>
-      </div>
-
       <nav className="mgmt-sidebar-nav">
         {menuItems.map((item) => (
           <button
@@ -32,7 +28,7 @@ const Sidebar = ({ activePage, onPageChange, isOpen, onClose }) => {
           >
             <span className="mgmt-nav-icon">{item.icon}</span>
             <span className="mgmt-nav-label">{item.label}</span>
-            <div className="mgmt-nav-indicator"></div>
+            {activePage === item.id && <span className="mgmt-nav-indicator"></span>}
           </button>
         ))}
       </nav>

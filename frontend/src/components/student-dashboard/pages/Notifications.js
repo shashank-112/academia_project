@@ -50,15 +50,6 @@ const Notifications = () => {
     { id: 'general', label: 'General', icon: '📢', count: notifications.filter(n => (n.notification_type || n.type || '').toLowerCase() === 'general').length },
   ];
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading notifications...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="notifications-page">
       {error && <div className="error-banner">{error}</div>}

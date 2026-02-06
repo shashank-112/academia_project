@@ -89,15 +89,6 @@ const Faculty = () => {
     setShowModal(true);
   };
 
-  if (loading) {
-    return (
-      <div className="mgmt-page-loading">
-        <div className="mgmt-loading-spinner"></div>
-        <p>Loading faculty information...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="mgmt-faculty-container">
       {error && <div className="mgmt-error-banner">{error}</div>}

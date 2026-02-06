@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Sidebar.css';
+import '../../faculty-dashboard/styles/FacultySidebar.css';
 
 const Sidebar = ({ isOpen, activePage, onPageChange, onClose }) => {
   const menuItems = [
@@ -10,33 +10,31 @@ const Sidebar = ({ isOpen, activePage, onPageChange, onClose }) => {
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
-  const handlePageChange = (pageId) => {
-    onPageChange(pageId);
-    onClose(); // Close sidebar on mobile after selection
+  const handleClick = (id) => {
+    if (onPageChange) onPageChange(id);
+    if (onClose) onClose();
   };
 
   return (
-    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <div className="sidebar-close-btn" onClick={onClose}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+    <aside className={`faculty-sidebar ${isOpen ? 'open' : ''}`}>
+      <div className="faculty-sidebar-content">
+        <nav className="faculty-menu">
+          {menuItems.map(item => {
+            const active = activePage === item.id;
+            return (
+              <button
+                key={item.id}
+                className={`faculty-menu-item ${active ? 'active' : ''}`}
+                onClick={() => handleClick(item.id)}
+              >
+                <span className="faculty-menu-icon">{item.icon}</span>
+                <span className="faculty-menu-label">{item.label}</span>
+                {active && <span className="faculty-menu-indicator"></span>}
+              </button>
+            );
+          })}
+        </nav>
       </div>
-
-      <nav className="sidebar-nav">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            className={`nav-item ${activePage === item.id ? 'active' : ''}`}
-            onClick={() => handlePageChange(item.id)}
-          >
-            <span className="nav-icon">{item.icon}</span>
-            <span className="nav-label">{item.label}</span>
-            {activePage === item.id && <div className="nav-indicator"></div>}
-          </button>
-        ))}
-      </nav>
     </aside>
   );
 };

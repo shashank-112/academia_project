@@ -9,6 +9,32 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Year ID to display mapping
+  const yearNames = {
+    '1': '1st Year',
+    '2': '2nd Year',
+    '3': '3rd Year',
+    '4': '4th Year'
+  };
+
+  // Branch ID to name mapping
+  const branchNames = {
+    '1': 'Computer Science',
+    '2': 'Electronics',
+    '3': 'Mechanical',
+    '4': 'Civil',
+    '5': 'Electrical',
+    '6': 'Civil',
+    '7': 'Mechanical'
+  };
+
+  // Section ID to letter mapping
+  const sectionNames = {
+    '1': 'A',
+    '2': 'B',
+    '3': 'C'
+  };
+
   useEffect(() => {
     loadData();
   }, []);
@@ -29,15 +55,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading dashboard...</p>
-      </div>
-    );
-  }
 
   const uniqueCourses = new Set(assignments?.map(a => a.course_id) || []);
   const courseCount = uniqueCourses.size;
@@ -119,9 +136,9 @@ const Home = () => {
                 {assignments.map((assignment, idx) => (
                   <tr key={idx}>
                     <td className="course-code">{assignment.course_id || 'N/A'}</td>
-                    <td>{assignment.year_id || 'N/A'}</td>
-                    <td>{assignment.branch_id || 'N/A'}</td>
-                    <td>{assignment.section_id || 'N/A'}</td>
+                    <td>{yearNames[assignment.year_id.toString()] || assignment.year_id || 'N/A'}</td>
+                    <td>{branchNames[assignment.branch_id.toString()] || assignment.branch_id || 'N/A'}</td>
+                    <td>Section - {sectionNames[assignment.section_id.toString()] || assignment.section_id || 'N/A'}</td>
                     <td>
                       <button className="action-btn">View Details</button>
                     </td>

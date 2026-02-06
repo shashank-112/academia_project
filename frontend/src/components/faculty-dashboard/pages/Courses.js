@@ -8,6 +8,24 @@ const Courses = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Branch ID to name mapping
+  const branchNames = {
+    '1': 'Computer Science',
+    '2': 'Electronics',
+    '3': 'Mechanical',
+    '4': 'Civil',
+    '5': 'Electrical',
+    '6': 'Civil',
+    '7': 'Mechanical'
+  };
+
+  // Section ID to letter mapping
+  const sectionNames = {
+    '1': 'A',
+    '2': 'B',
+    '3': 'C'
+  };
+
   useEffect(() => {
     loadCourses();
   }, []);
@@ -24,15 +42,6 @@ const Courses = () => {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading courses...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="faculty-courses">
@@ -54,11 +63,11 @@ const Courses = () => {
               <div className="course-details">
                 <div className="detail-item">
                   <span className="label">Branch</span>
-                  <span className="value">{assignment.branch_id}</span>
+                  <span className="value">{branchNames[assignment.branch_id.toString()] || assignment.branch_id}</span>
                 </div>
                 <div className="detail-item">
                   <span className="label">Section</span>
-                  <span className="value">{assignment.section_id}</span>
+                  <span className="value">Section - {sectionNames[assignment.section_id.toString()] || assignment.section_id}</span>
                 </div>
               </div>
               <button className="course-action-btn">Manage Course</button>

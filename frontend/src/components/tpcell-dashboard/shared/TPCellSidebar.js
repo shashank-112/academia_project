@@ -23,19 +23,21 @@ const TPCellSidebar = () => {
 
   return (
     <aside className="tpcell-sidebar">
-      <nav className="tpcell-menu">
-        {menuItems.map((item) => (
-          <Link
-            key={item.id}
-            to={item.path}
-            className={`tpcell-menu-item ${isActive(item.path) ? 'active' : ''}`}
-          >
-            <span className="tpcell-menu-icon">{item.icon}</span>
-            <span className="tpcell-menu-label">{item.label}</span>
-            {isActive(item.path) && <span className="tpcell-active-indicator"></span>}
-          </Link>
-        ))}
-      </nav>
+      <div className="tpcell-sidebar-content">
+        <nav className="tpcell-menu">
+          {menuItems.map(item => (
+            <Link
+              key={item.id}
+              to={item.path}
+              className={`tpcell-menu-item ${isActive(item.path) ? 'active' : ''}`}
+            >
+              <span className="tpcell-menu-icon">{item.icon}</span>
+              <span className="tpcell-menu-label">{item.label}</span>
+              {isActive(item.path) && <span className="tpcell-menu-indicator"></span>}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </aside>
   );
 };

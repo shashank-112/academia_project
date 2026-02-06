@@ -31,6 +31,11 @@
   padding: 0.95rem 1rem;
   color: #666;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -58,6 +63,12 @@
   color: #667eea;
   transform: translateX(4px);
   padding-left: 1.25rem;
+}
+
+.faculty-menu-item:focus,
+.faculty-menu-item:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .faculty-menu-item:hover::before {

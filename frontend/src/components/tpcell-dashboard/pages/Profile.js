@@ -33,15 +33,6 @@ const Profile = () => {
     setShowPasswordForm(false);
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading profile...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="tpcell-profile">
       <div className="page-header">

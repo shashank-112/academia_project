@@ -74,15 +74,6 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  if (loading) {
-    return (
-      <div className="mgmt-page-loading">
-        <div className="mgmt-loading-spinner"></div>
-        <p>Loading profile...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="mgmt-profile-container">
       {error && <div className="mgmt-error-banner">{error}</div>}

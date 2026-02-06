@@ -40,15 +40,6 @@ const FacultyNotifications = () => {
     setFormData({ title: '', description: '', type: 'General', priority: 'Medium', dueDate: '' });
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading notifications...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="faculty-notifications">
       {error && <div className="error-banner">{error}</div>}

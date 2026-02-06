@@ -46,15 +46,6 @@ const Home = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading TP Cell portal...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="tpcell-home">
       {error && <div className="error-banner">{error}</div>}

@@ -38,15 +38,6 @@ const Home = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading your dashboard...</p>
-      </div>
-    );
-  }
-
   const calculateCGPA = () => {
     if (!academics || academics.length === 0) return 0;
     const totalMarks = academics.reduce((sum, a) => sum + (a.marks || 0), 0);

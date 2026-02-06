@@ -28,15 +28,6 @@ const Profile = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading profile...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="profile-page">
       {error && <div className="error-banner">{error}</div>}

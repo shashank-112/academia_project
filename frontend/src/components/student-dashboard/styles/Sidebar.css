@@ -1,56 +1,203 @@
-/* ===== SIDEBAR STYLING ===== */
+/* ===== STUDENT SIDEBAR ===== */
 
 .sidebar {
-  width: 260px;
+  position: fixed;
+  left: 0;
+  top: 70px;
+  width: 250px;
+  height: calc(100vh - 70px);
   background: white;
-  border-right: 1px solid #e0e0e0;
-  padding: 1.5rem 0;
+  border-right: 2px solid #e8ecf5;
   overflow-y: auto;
+  z-index: 99;
+  box-shadow: 2px 0 8px rgba(102, 126, 234, 0.08);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
 }
 
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.2);
-  border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.4);
-}
-
-/* ===== SIDEBAR CLOSE BUTTON (Mobile) ===== */
-.sidebar-close-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: #667eea;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  padding: 0;
-  margin: 0 1rem 1rem 1rem;
-  transition: transform 0.3s ease;
-}
-
-.sidebar-close-btn:hover {
-  transform: rotate(90deg);
-}
-
-/* ===== SIDEBAR NAVIGATION ===== */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0 0.75rem;
+  padding: 1.5rem 0.75rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+  color: #666;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.2px;
+  cursor: pointer;
+  text-align: left;
+  overflow: visible;
+  width: 100%;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 10px 10px 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.nav-item:hover::before {
+  transform: scaleY(1);
+}
+
+.nav-item.active::before {
+  transform: scaleY(1);
+}
+
+.nav-item:hover {
+  background: #f8f9ff;
+  color: #667eea;
+  transform: translateX(4px);
+  padding-left: 1.25rem;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+  color: #667eea;
+  border-radius: 12px;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+}
+
+.nav-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-indicator {
+  position: absolute;
+  right: 0.75rem;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f5f7fa;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .nav-item {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .nav-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 2px solid #e8ecf5;
+    overflow-x: auto;
+    z-index: 97;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+  }
+
+  .nav-item {
+    min-width: 90px;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .nav-item::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: 3px;
+    border-radius: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .nav-item:hover::before {
+    transform: scaleX(1);
+  }
+
+  .nav-item.active::before {
+    transform: scaleX(1);
+  }
 }
 
 .nav-item {

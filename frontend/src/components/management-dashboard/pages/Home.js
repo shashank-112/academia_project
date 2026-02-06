@@ -68,15 +68,6 @@ const Home = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="mgmt-page-loading">
-        <div className="mgmt-loading-spinner"></div>
-        <p>Loading dashboard...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="mgmt-home-container">
       {error && <div className="mgmt-error-banner">{error}</div>}

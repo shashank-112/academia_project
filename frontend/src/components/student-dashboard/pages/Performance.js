@@ -40,15 +40,6 @@ const Performance = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading performance data...</p>
-      </div>
-    );
-  }
-
   const calculateMetrics = () => {
     if (!examData || examData.length === 0) {
       return { avgMid: 0, avgQuiz: 0, avgAssignment: 0, totalAverage: 0 };

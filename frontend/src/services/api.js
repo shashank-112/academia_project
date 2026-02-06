@@ -63,6 +63,11 @@ export const facultyService = {
     const response = await apiClient.get('/faculty/assignments/');
     return response.data;
   },
+  getStudents: async (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    const response = await apiClient.get(`/faculty/students/?${params}`);
+    return response.data;
+  },
 };
 
 export const managementService = {
