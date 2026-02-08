@@ -284,10 +284,10 @@ else:
     print(f"✗ File not found: {faculty_csv}")
 
 # ============================================================================
-# 6. LOAD FACULTY-STUDENT DEPARTMENT ASSIGNMENTS (6thFACULTY_STUDENT_DEPT.csv)
+# 6. LOAD FACULTY-STUDENT DEPARTMENT ASSIGNMENTS (6th_FACULTY_STUDENT_DEPT.csv)
 # ============================================================================
 print("\n[6/10] Loading Faculty-Student Department Assignments...")
-fac_assign_csv = DATA_PATH / '6thFACULTY_STUDENT_DEPT.csv'
+fac_assign_csv = DATA_PATH / '6th_FACULTY_STUDENT_DEPT.csv'
 
 if fac_assign_csv.exists():
     df_fac_assign = pd.read_csv(fac_assign_csv)
