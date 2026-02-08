@@ -84,7 +84,7 @@
   padding: 40px;
   width: 100%;
   max-width: 500px;
-  animation: slideIn 0.5s ease-out, floatCard 6s ease-in-out infinite alternate;
+  /* animation: slideIn 0.5s ease-out, floatCard 6s ease-in-out infinite alternate; */
 }
 
 @keyframes slideIn {

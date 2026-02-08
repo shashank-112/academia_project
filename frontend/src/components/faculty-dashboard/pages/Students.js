@@ -30,13 +30,13 @@ const Students = () => {
   };
 
   const branchNames = {
-    '1': 'Computer Science',
-    '2': 'Electronics',
-    '3': 'Mechanical',
-    '4': 'Civil',
-    '5': 'Electrical',
-    '6': 'Civil',
-    '7': 'Mechanical'
+    '1': 'CSE',
+    '2': 'ECE',
+    '3': 'CSM',
+    '4': 'CSD',
+    '5': 'EEE',
+    '6': 'CV',
+    '7': 'ME'
   };
 
   const sectionNames = {
@@ -328,7 +328,7 @@ const Students = () => {
                       style={{ animationDelay: `${idx * 0.05}s` }}
                     >
                       <div className="col-name">
-                        <div className="student-avatar">{student.name.charAt(0)}</div>
+                        <div className="student-avatar">{student.name?.charAt(0) || ''}</div>
                         <div className="student-info">
                           <div className="student-name">{student.name}</div>
                           <div className="student-email">{student.email}</div>
@@ -360,9 +360,9 @@ const Students = () => {
           <section className="student-details-panel">
             {/* DETAIL HEADER */}
             <div className="detail-header">
-              <div className="detail-avatar-large">{selectedStudent.name.charAt(0)}</div>
+              <div className="detail-avatar-large">{selectedStudent.name?.charAt(0) || ''}</div>
               <h2>{selectedStudent.name}</h2>
-              <p className="detail-subtitle">{yearNames[selectedStudent.year_id.toString()]} • {branchNames[selectedStudent.branch_id.toString()]} • Section {sectionNames[selectedStudent.section_id.toString()]}</p>
+              <p className="detail-subtitle">{yearNames[selectedStudent.year_id?.toString()]} • {branchNames[selectedStudent.branch_id?.toString()]} • Section {sectionNames[selectedStudent.section_id?.toString()]}</p>
             </div>
 
             {/* CONTACT INFO */}

@@ -10,13 +10,13 @@ const Courses = () => {
 
   // Branch ID to name mapping
   const branchNames = {
-    '1': 'Computer Science',
-    '2': 'Electronics',
-    '3': 'Mechanical',
-    '4': 'Civil',
-    '5': 'Electrical',
-    '6': 'Civil',
-    '7': 'Mechanical'
+    '1': 'CSE',
+    '2': 'ECE',
+    '3': 'CSM',
+    '4': 'CSD',
+    '5': 'EEE',
+    '6': 'CV',
+    '7': 'ME'
   };
 
   // Section ID to letter mapping

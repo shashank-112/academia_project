@@ -52,6 +52,41 @@ export const studentService = {
     const response = await apiClient.get('/students/exam-data/');
     return response.data;
   },
+  // Assignment endpoints
+  getAssignments: async () => {
+    const response = await apiClient.get('/assignments/student/assignments/');
+    return response.data;
+  },
+  getAssignmentCards: async () => {
+    const response = await apiClient.get('/assignments/student/assignments/cards/');
+    return response.data;
+  },
+  getAssignmentDetail: async (assignmentId) => {
+    const response = await apiClient.get(`/assignments/student/assignments/${assignmentId}/`);
+    return response.data;
+  },
+  uploadAssignment: async (assignmentId, formData) => {
+    const response = await apiClient.post(
+      `/assignments/student/assignments/${assignmentId}/upload/`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
+  downloadAssignment: async (assignmentId) => {
+    const response = await apiClient.get(`/assignments/student/assignments/${assignmentId}/download/`);
+    return response.data;
+  },
+  createAssignment: async (facultyId, courseId) => {
+    const response = await apiClient.post(
+      `/assignments/student/assignments/create/${facultyId}/${courseId}/`
+    );
+    return response.data;
+  },
 };
 
 export const facultyService = {
@@ -66,6 +101,34 @@ export const facultyService = {
   getStudents: async (filters = {}) => {
     const params = new URLSearchParams(filters).toString();
     const response = await apiClient.get(`/faculty/students/?${params}`);
+    return response.data;
+  },
+  // Assignment grading endpoints
+  getAssignmentsOverview: async () => {
+    const response = await apiClient.get('/assignments/faculty/assignments/overview/');
+    return response.data;
+  },
+  getPendingAssignments: async () => {
+    const response = await apiClient.get('/assignments/faculty/assignments/pending/');
+    return response.data;
+  },
+  getGradedAssignments: async () => {
+    const response = await apiClient.get('/assignments/faculty/assignments/graded/');
+    return response.data;
+  },
+  getAssignmentDetail: async (assignmentId) => {
+    const response = await apiClient.get(`/assignments/faculty/assignments/${assignmentId}/`);
+    return response.data;
+  },
+  gradeAssignment: async (assignmentId, marks) => {
+    const response = await apiClient.patch(
+      `/assignments/faculty/assignments/${assignmentId}/grade/`,
+      { marks_awarded: marks }
+    );
+    return response.data;
+  },
+  downloadStudentAssignment: async (assignmentId) => {
+    const response = await apiClient.get(`/assignments/faculty/assignments/${assignmentId}/download/`);
     return response.data;
   },
 };
@@ -153,6 +216,10 @@ export const tpcellService = {
 export const notificationService = {
   getNotifications: async () => {
     const response = await apiClient.get('/notifications/');
+    return response.data;
+  },
+  createNotification: async (payload) => {
+    const response = await apiClient.post('/notifications/', payload);
     return response.data;
   },
 };

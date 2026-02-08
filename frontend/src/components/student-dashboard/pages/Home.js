@@ -31,8 +31,31 @@ const Home = () => {
       setBacklogs(backlogsData);
       setNotifications(Array.isArray(notifData) ? notifData.slice(0, 5) : []);
     } catch (err) {
-      setError('Failed to load dashboard data');
+      setError('Failed to load dashboard data - showing demo data');
       console.error(err);
+
+      // Demo fallback so UI remains usable while backend is unavailable
+      const demoProfile = {
+        first_name: 'Demo',
+        last_name: 'Student',
+        roll_no: '4YCS000',
+        branch: 'CSE',
+        year_id: 4,
+        section_id: 1,
+      };
+      const demoAcademics = [
+        { semester_id: 7, course_code: 'CS101', marks: 85 },
+        { semester_id: 7, course_code: 'CS102', marks: 78 },
+      ];
+      const demoBacklogs = [];
+      const demoNotifs = [
+        { title: 'Welcome to the Demo', description: 'Demo notifications are visible when backend is down.', created_at: new Date() }
+      ];
+
+      setProfile(demoProfile);
+      setAcademics(demoAcademics);
+      setBacklogs(demoBacklogs);
+      setNotifications(demoNotifs);
     } finally {
       setLoading(false);
     }

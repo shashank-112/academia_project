@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { notificationService } from '../../../services/api';
+import { notificationService, facultyService } from '../../../services/api';
 import '../styles/Common.css';
 import '../styles/FacultyNotifications.css';
+import '../styles/Courses.css';
 
 const FacultyNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -15,6 +16,30 @@ const FacultyNotifications = () => {
     priority: 'Medium',
     dueDate: '',
   });
+  const [assignedClasses, setAssignedClasses] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+
+  // Mappings for readable labels
+  const yearNames = {
+    '1': '1st Year',
+    '2': '2nd Year',
+    '3': '3rd Year',
+    '4': '4th Year'
+  };
+  const branchNames = {
+    '1': 'CSE',
+    '2': 'ECE',
+    '3': 'CSM',
+    '4': 'CSD',
+    '5': 'EEE',
+    '6': 'CV',
+    '7': 'ME'
+  };
+  const sectionNames = {
+    '1': 'A',
+    '2': 'B',
+    '3': 'C'
+  };
 
   useEffect(() => {
     loadNotifications();
@@ -25,6 +50,29 @@ const FacultyNotifications = () => {
       setLoading(true);
       const data = await notificationService.getNotifications();
       setNotifications(Array.isArray(data) ? data : []);
+      // load faculty assigned classes for targeting
+      try {
+        const assigned = await facultyService.getAssignments();
+        // assigned is expected to be list of {course_id, year_id, branch_id, section_id}
+        const uniq = [];
+        const seen = new Set();
+        (assigned || []).forEach(a => {
+          const key = `${a.course_id || ''}-${a.year_id}-${a.branch_id}-${a.section_id}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            uniq.push({
+              course_id: a.course_id,
+              year_id: a.year_id,
+              branch_id: a.branch_id,
+              section_id: a.section_id,
+            });
+          }
+        });
+        setAssignedClasses(uniq);
+      } catch (e) {
+        console.warn('Failed to load faculty assignments for notifications', e);
+        setAssignedClasses([]);
+      }
     } catch (err) {
       setError('Failed to load notifications');
       console.error(err);
@@ -33,11 +81,40 @@ const FacultyNotifications = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement send notification
-    console.log('Sending notification:', formData);
-    setFormData({ title: '', description: '', type: 'General', priority: 'Medium', dueDate: '' });
+    try {
+      const payload = {
+        ...formData,
+        targets: selectedClasses, // list of {year_id, branch_id, section_id}
+      };
+      console.log('Sending notification payload:', payload);
+      const result = await notificationService.createNotification(payload);
+      console.log('Notification created:', result);
+      
+      // Show success message and reset form
+      alert('Notification sent successfully!');
+      setFormData({ title: '', description: '', type: 'General', priority: 'Medium', dueDate: '' });
+      setSelectedClasses([]);
+      
+      // Reload notifications to show the new one
+      setTimeout(() => {
+        loadNotifications();
+      }, 500);
+    } catch (err) {
+      console.error('Error sending notification:', err);
+      alert('Failed to send notification: ' + (err.response?.data?.error || err.message));
+    }
+  };
+
+  const toggleClassSelection = (cls) => {
+    const key = `${cls.course_id}-${cls.year_id}-${cls.branch_id}-${cls.section_id}`;
+    const exists = selectedClasses.some(c => `${c.course_id}-${c.year_id}-${c.branch_id}-${c.section_id}` === key);
+    if (exists) {
+      setSelectedClasses(prev => prev.filter(c => `${c.course_id}-${c.year_id}-${c.branch_id}-${c.section_id}` !== key));
+    } else {
+      setSelectedClasses(prev => prev.concat(cls));
+    }
   };
 
   return (
@@ -63,6 +140,31 @@ const FacultyNotifications = () => {
       {activeTab === 'create' && (
         <section className="notification-create-section">
           <form onSubmit={handleSubmit} className="notification-form">
+            {/* Class target buttons */}
+            <div className="class-buttons">
+              <button
+                type="button"
+                className={`course-action-btn ${selectedClasses.length === 0 ? 'active' : ''}`}
+                onClick={() => setSelectedClasses([])}
+              >
+                All Students
+              </button>
+              {assignedClasses.map((cls) => {
+                const label = `${cls.course_id} — ${yearNames[cls.year_id?.toString()] || cls.year_id} — ${branchNames[cls.branch_id?.toString()] || cls.branch_id} — Sec ${sectionNames[cls.section_id?.toString()] || cls.section_id}`;
+                const key = `${cls.course_id}-${cls.year_id}-${cls.branch_id}-${cls.section_id}`;
+                const active = selectedClasses.some(c => `${c.course_id}-${c.year_id}-${c.branch_id}-${c.section_id}` === key);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`course-action-btn ${active ? 'active' : ''}`}
+                    onClick={() => toggleClassSelection(cls)}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
             <div className="form-group">
               <label>Title</label>
               <input
@@ -151,3 +253,4 @@ const FacultyNotifications = () => {
 };
 
 export default FacultyNotifications;
+

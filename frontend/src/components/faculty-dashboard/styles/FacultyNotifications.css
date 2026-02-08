@@ -299,3 +299,30 @@
     font-size: 1rem;
   }
 }
+
+/* Class buttons for targeting notifications - now using course-action-btn from Courses.css */
+.class-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.class-buttons .course-action-btn {
+  background: white;
+  color: #667eea;
+  border: 2px solid #e8ecf5;
+  padding: 0.75rem 1rem;
+  margin-top: 0;
+}
+
+.class-buttons .course-action-btn:hover {
+  border-color: #667eea;
+}
+
+.class-buttons .course-action-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}

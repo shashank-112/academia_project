@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def faculty_profile(request):
     """Get faculty profile"""
     try:
-        faculty = Faculty.objects.get(faculty_id=request.user.user_id)
+        faculty = Faculty.objects.get(email=request.user.email)
         data = {
             'faculty_id': faculty.faculty_id,
             'first_name': faculty.first_name,
@@ -32,7 +32,7 @@ def faculty_profile(request):
 def faculty_assignments(request):
     """Get faculty course assignments"""
     try:
-        faculty = Faculty.objects.get(faculty_id=request.user.user_id)
+        faculty = Faculty.objects.get(email=request.user.email)
         assignments = FacultyAssignment.objects.filter(faculty=faculty)
         data = [{
             'year_id': a.year_id,
@@ -49,8 +49,8 @@ def faculty_assignments(request):
 def faculty_students(request):
     """Get students that faculty is teaching (from their assignments)"""
     try:
-        logger.info(f"✓ Fetching students for faculty with user_id: {request.user.user_id}")
-        faculty = Faculty.objects.get(faculty_id=request.user.user_id)
+        logger.info(f"✓ Fetching students for faculty with email: {request.user.email}")
+        faculty = Faculty.objects.get(email=request.user.email)
         
         # Get faculty's assignments
         assignments = FacultyAssignment.objects.filter(faculty=faculty).distinct()
@@ -118,7 +118,7 @@ def faculty_students(request):
         logger.info(f"✓ Retrieved {len(students_list)} students for faculty {faculty.faculty_id}")
         return Response(students_list, status=status.HTTP_200_OK)
     except Faculty.DoesNotExist:
-        logger.error(f"✗ Faculty not found for user_id: {request.user.user_id}")
+        logger.error(f"✗ Faculty not found for email: {request.user.email}")
         return Response({'error': 'Faculty not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         logger.error(f"✗ Error fetching faculty students: {str(e)}")

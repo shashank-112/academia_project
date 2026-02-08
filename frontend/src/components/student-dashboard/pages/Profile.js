@@ -39,10 +39,10 @@ const Profile = () => {
 
       {/* PROFILE HEADER */}
       <section className="profile-header-section">
-        <div className="profile-card-header">
-          <div className="avatar-large">
-            {profile?.first_name.charAt(0).toUpperCase()}
-          </div>
+          <div className="profile-card-header">
+            <div className="avatar-large">
+              {profile?.first_name?.charAt(0)?.toUpperCase() || ''}
+            </div>
           <div className="profile-name-section">
             <h2>{profile?.first_name} {profile?.last_name}</h2>
             <p className="profile-id">ID: {profile?.student_id}</p>

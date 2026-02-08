@@ -9,7 +9,7 @@ from .models import Student, StudentAcademic, StudentBacklog, StudentExamData
 def student_profile(request):
     """Get student profile"""
     try:
-        student = Student.objects.get(student_id=request.user.user_id)
+        student = Student.objects.get(email=request.user.email)
         data = {
             'student_id': student.student_id,
             'first_name': student.first_name,
@@ -30,7 +30,7 @@ def student_profile(request):
 def student_academics(request):
     """Get student academic records"""
     try:
-        student = Student.objects.get(student_id=request.user.user_id)
+        student = Student.objects.get(email=request.user.email)
         academics = StudentAcademic.objects.filter(student=student)
         data = [{
             'semester_id': a.semester_id,
@@ -47,7 +47,7 @@ def student_academics(request):
 def student_backlogs(request):
     """Get student backlogs"""
     try:
-        student = Student.objects.get(student_id=request.user.user_id)
+        student = Student.objects.get(email=request.user.email)
         backlogs = StudentBacklog.objects.filter(student=student)
         data = [{
             'semester_id': b.semester_id,
@@ -62,7 +62,7 @@ def student_backlogs(request):
 def student_exam_data(request):
     """Get student mid exam marks, quiz marks, and assignment marks"""
     try:
-        student = Student.objects.get(student_id=request.user.user_id)
+        student = Student.objects.get(email=request.user.email)
         exam_data = StudentExamData.objects.filter(student=student).order_by('semester_id', '-mid_id', 'course_id')
         
         data = [{

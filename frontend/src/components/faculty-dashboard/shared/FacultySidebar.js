@@ -10,7 +10,7 @@ const FacultySidebar = () => {
     { id: 'home', label: 'Home', icon: '🏠', path: '/faculty' },
     { id: 'courses', label: 'Courses', icon: '📚', path: '/faculty/courses' },
     { id: 'students', label: 'Students', icon: '👥', path: '/faculty/students' },
-    { id: 'assessments', label: 'Assessments', icon: '📊', path: '/faculty/assessments' },
+    { id: 'assignments', label: 'Assignments', icon: '📝', path: '/faculty/assignments' },
     { id: 'notifications', label: 'Notifications', icon: '🔔', path: '/faculty/notifications' },
     { id: 'profile', label: 'Profile', icon: '👤', path: '/faculty/profile' },
     { id: 'settings', label: 'Settings', icon: '⚙️', path: '/faculty/settings' },

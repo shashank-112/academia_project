@@ -74,7 +74,7 @@ const Home = () => {
 
       {/* Management Summary Card */}
       <div className="mgmt-summary-card">
-        <h2>Welcome, {data?.profile?.first_name}!</h2>
+        <h2 >Welcome, {data?.profile?.first_name}!</h2>
         <div className="mgmt-summary-info">
           <div className="mgmt-summary-item">
             <label>Designation</label>

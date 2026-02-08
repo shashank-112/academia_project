@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { managementService } from '../../../services/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import { managementService, notificationService } from '../../../services/api';
 import '../styles/Notifications.css';
 import '../styles/Common.css';
+
+const BRANCH_NAMES = {
+  '1': 'CSE',
+  '2': 'ECE',
+  '3': 'CSM',
+  '4': 'CSD',
+  '5': 'EEE',
+  '6': 'CV',
+  '7': 'ME'
+};
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -9,7 +19,6 @@ const Notifications = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    target: 'All Students',
     type: 'General',
     title: '',
     description: '',
@@ -17,9 +26,20 @@ const Notifications = () => {
     priority: 'Medium'
   });
 
+  // Filter UI state
+  const years = ['1', '2', '3', '4'];
+  const branchNames = BRANCH_NAMES;
+  const [selectedYear, setSelectedYear] = useState('1');
+  const [selectedBranch, setSelectedBranch] = useState('1');
+  const [selectedSection, setSelectedSection] = useState('1');
+  const [branchSections, setBranchSections] = useState({});
+  const [feeNotPaid, setFeeNotPaid] = useState('no');
+
   useEffect(() => {
     loadNotifications();
   }, []);
+
+  
 
   const loadNotifications = async () => {
     try {
@@ -68,6 +88,36 @@ const Notifications = () => {
     setFormData({...formData, [name]: value});
   };
 
+  const loadStudentsForFilters = useCallback(async () => {
+    try {
+      const students = await managementService.getAllStudents();
+      const sectionsMap = {};
+      (students || []).forEach((s) => {
+        const b = String(s.branch || s.branch_id || s.branchId || s.branch);
+        const sec = String(s.section || s.sec_id || s.sec || s.section_id);
+        if (!b) return;
+        sectionsMap[b] = sectionsMap[b] || new Set();
+        sectionsMap[b].add(sec || '1');
+      });
+      const out = {};
+      Object.keys(sectionsMap).forEach(k => { out[k] = Array.from(sectionsMap[k]).filter(Boolean).sort(); });
+      Object.keys(branchNames).forEach(bk => { if (!out[bk]) out[bk] = ['1']; });
+      setBranchSections(out);
+      setSelectedSection((out[selectedBranch] && out[selectedBranch][0]) || '1');
+    } catch (err) {
+      console.warn('Failed to load students for management filters', err);
+      const fallback = {};
+      Object.keys(branchNames).forEach(bk => { fallback[bk] = ['1']; });
+      setBranchSections(fallback);
+    }
+  }, [selectedBranch, branchNames]);
+
+  useEffect(() => {
+    // populate branchSections for management filters
+    loadStudentsForFilters();
+  }, [loadStudentsForFilters]);
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -80,18 +130,45 @@ const Notifications = () => {
 
     try {
       setLoading(true);
-      // API call would go here
-      await managementService.createNotification(formData);
+
+      let targets = [];
+
+      if (feeNotPaid === 'unpaid') {
+        // Fetch fee details for selected filters and send to students with Pending status
+        const feeDetails = await managementService.getStudentFeeDetails({ year_id: Number(selectedYear), branch_id: Number(selectedBranch), section_id: Number(selectedSection) });
+        const unpaid = (feeDetails || []).filter(s => (s.status || s.fee_status || '').toString().toLowerCase() === 'pending');
+        if (!unpaid.length) {
+          setError('No students with pending fees found for the selected class');
+          setLoading(false);
+          return;
+        }
+        targets = unpaid.map(s => ({ student_id: s.student_id || s.studentId || s.id }));
+      } else {
+        // Build class-level target
+        targets = [{ year_id: Number(selectedYear), branch_id: Number(selectedBranch), section_id: Number(selectedSection) }];
+      }
+
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type || 'General',
+        priority: formData.priority || 'Medium',
+        dueDate: formData.dueDate,
+        targets,
+      };
+      await notificationService.createNotification(payload);
       
       setSuccess('Notification sent successfully!');
       setFormData({
-        target: 'All Students',
         type: 'General',
         title: '',
         description: '',
         dueDate: '',
         priority: 'Medium'
       });
+
+      // reset fee filter
+      setFeeNotPaid('no');
 
       // Reload notifications
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -106,13 +183,16 @@ const Notifications = () => {
 
   const handleReset = () => {
     setFormData({
-      target: 'All Students',
       type: 'General',
       title: '',
       description: '',
       dueDate: '',
       priority: 'Medium'
     });
+    setSelectedYear('1');
+    setSelectedBranch('1');
+    setSelectedSection('1');
+    setFeeNotPaid('no');
     setError('');
     setSuccess('');
   };
@@ -151,30 +231,25 @@ const Notifications = () => {
         <h2>📢 Create New Notification</h2>
         <form onSubmit={handleSubmit}>
           <div className="mgmt-notification-form-grid">
-            {/* Target */}
+            {/* Target: Year / Branch / Section for Management */}
             <div className="mgmt-form-group">
-              <label>Target *</label>
-              <select name="target" value={formData.target} onChange={handleFormChange}>
-                <option>All Students</option>
-                <option>1st Year</option>
-                <option>2nd Year</option>
-                <option>3rd Year</option>
-                <option>4th Year</option>
-                <option>CSE Branch</option>
-                <option>ECE Branch</option>
-                <option>Mechanical Branch</option>
-                <option>Civil Branch</option>
+              <label>Year *</label>
+              <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+                {years.map(y => (<option key={y} value={y}>{y} Year</option>))}
               </select>
             </div>
 
-            {/* Type */}
             <div className="mgmt-form-group">
-              <label>Type *</label>
-              <select name="type" value={formData.type} onChange={handleFormChange}>
-                <option>Fee</option>
-                <option>General</option>
-                <option>Academic</option>
-                <option>Administrative</option>
+              <label>Branch *</label>
+              <select value={selectedBranch} onChange={(e) => { setSelectedBranch(e.target.value); setSelectedSection((branchSections[e.target.value] && branchSections[e.target.value][0]) || '1'); }}>
+                {Object.keys(branchNames).map(b => (<option key={b} value={b}>{branchNames[b]}</option>))}
+              </select>
+            </div>
+
+            <div className="mgmt-form-group">
+              <label>Section *</label>
+              <select value={selectedSection} onChange={(e) => setSelectedSection(e.target.value)}>
+                {(branchSections[selectedBranch] || ['1']).map(s => (<option key={s} value={s}>Section {s}</option>))}
               </select>
             </div>
 
@@ -197,6 +272,25 @@ const Notifications = () => {
                 value={formData.dueDate}
                 onChange={handleFormChange}
               />
+            </div>
+
+            <div className="mgmt-form-group mgmt-fee-filter">
+              <label>Fee Filter</label>
+              <select value={feeNotPaid} onChange={(e) => setFeeNotPaid(e.target.value)}>
+                <option value="no">All students (default)</option>
+                <option value="unpaid">Only students with unpaid fees</option>
+              </select>
+            </div>
+
+            {/* Type */}
+            <div className="mgmt-form-group">
+              <label>Type *</label>
+              <select name="type" value={formData.type} onChange={handleFormChange}>
+                <option>Fee</option>
+                <option>General</option>
+                <option>Academic</option>
+                <option>Administrative</option>
+              </select>
             </div>
 
             {/* Title */}

@@ -95,7 +95,7 @@ print(f"\n✓ Fixed {fixed_count} + Created {created_count} = {fixed_count + cre
 # ============================================================================
 print("\n[2/3] Loading Faculty Assignments...")
 DATA_PATH = Path('../../data').resolve()
-faculty_assign_csv = DATA_PATH / '6thFACULTY_STUDENT_DEPT.csv'
+faculty_assign_csv = DATA_PATH / '6th_FACULTY_STUDENT_DEPT.csv'
 
 if faculty_assign_csv.exists():
     df_assignments = pd.read_csv(faculty_assign_csv)

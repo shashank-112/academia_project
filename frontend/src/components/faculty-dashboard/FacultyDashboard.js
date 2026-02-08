@@ -6,7 +6,7 @@ import FacultySidebar from './shared/FacultySidebar';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
 import Students from './pages/Students';
-import Assessments from './pages/Assessments';
+import Assignments from './pages/Assignments';
 import FacultyNotifications from './pages/FacultyNotifications';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
@@ -30,11 +30,10 @@ const FacultyDashboard = () => {
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/students" element={<Students />} />
-            <Route path="/assessments" element={<Assessments />} />
+            <Route path="/assignments" element={<Assignments />} />
             <Route path="/notifications" element={<FacultyNotifications />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>

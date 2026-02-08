@@ -33,8 +33,25 @@ const Performance = () => {
         setActiveSemester(Math.max(...semesters));
       }
     } catch (err) {
-      setError('Failed to load performance data');
+      setError('Failed to load performance data - showing demo data');
       console.error(err);
+
+      // Demo fallback data
+      const demoExamData = [
+        { semester_id: 7, mid_id: 1, course_id: 'CS101', mid_marks: 16, quiz_marks: 4, assignment_marks: 4 },
+        { semester_id: 7, mid_id: 1, course_id: 'CS102', mid_marks: 14, quiz_marks: 3, assignment_marks: 4 },
+        { semester_id: 6, mid_id: 2, course_id: 'CS201', mid_marks: 15, quiz_marks: 4, assignment_marks: 3 },
+      ];
+      const demoAcademics = [
+        { semester_id: 7, course_code: 'CS101', marks: 85 },
+        { semester_id: 7, course_code: 'CS102', marks: 78 },
+      ];
+      const demoBacklogs = [];
+
+      setExamData(demoExamData);
+      setAcademics(demoAcademics);
+      setBacklogs(demoBacklogs);
+      if (demoExamData.length > 0) setActiveSemester(Math.max(...demoExamData.map(e => e.semester_id)));
     } finally {
       setLoading(false);
     }
