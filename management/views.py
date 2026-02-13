@@ -97,7 +97,7 @@ def recent_notifications(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_students(request):
-    """Get all students with optional filters"""
+    """Get all students with fee information and optional filters"""
     try:
         queryset = Student.objects.all()
         
@@ -135,20 +135,41 @@ def get_all_students(request):
                 logger.warning(f"Invalid section filter: {section}. Error: {str(e)}")
                 return Response({'error': f'Invalid section filter: {section}'}, status=status.HTTP_400_BAD_REQUEST)
         
-        students = queryset[:100]  # Limit to 100
+        students = queryset[:200]  # Limit to 200
         student_count = len(students)
         logger.info(f"✓ Retrieved {student_count} students with filters: {', '.join(filters_applied) if filters_applied else 'none'}")
         
-        data = [{
-            'id': int(s.student_id),
-            'name': f"{s.first_name} {s.last_name}",
-            'email': s.email,
-            'roll_no': int(s.roll_no),
-            'phone': s.phone_no,
-            'year': int(s.year_id),
-            'branch': int(s.branch_id),
-            'section': int(s.sec_id),
-        } for s in students]
+        data = []
+        for s in students:
+            # Get fee information for student
+            try:
+                fee = StudentFee.objects.get(student=s)
+                fee_total = fee.fee_total or 0
+                fee_paid = fee.paid_crt_fee or 0
+                fee_remaining = max(0, fee_total - fee_paid)
+            except StudentFee.DoesNotExist:
+                fee_total = 0
+                fee_paid = 0
+                fee_remaining = 0
+            
+            student_data = {
+                'id': int(s.student_id),
+                'name': f"{s.first_name} {s.last_name}",
+                'email': s.email,
+                'roll_no': int(s.roll_no),
+                'phone_no': s.phone_no,
+                'year_id': int(s.year_id),
+                'branch_id': int(s.branch_id),
+                'section_id': int(s.sec_id),
+                'fee_total': fee_total,
+                'fee_paid': fee_paid,
+                'fee_remaining': fee_remaining,
+                'library_fine': 0,
+                'equipment_fine': 0,
+                'paid_crt_fee': fee_paid > 0,
+            }
+            data.append(student_data)
+        
         return Response(data, status=status.HTTP_200_OK)
     except Exception as e:
         logger.error(f"✗ Error fetching students: {str(e)}", exc_info=True)

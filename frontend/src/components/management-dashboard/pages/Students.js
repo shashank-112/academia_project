@@ -1,323 +1,315 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { managementService } from '../../../services/api';
 import '../styles/Students.css';
 import '../styles/Common.css';
 
 const Students = () => {
   const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
-    year: '',
-    branch: '',
-    section: ''
+    year: 'all',
+    branch: 'all',
+    section: 'all'
   });
 
-  const [branches, setBranches] = useState(['CSE', 'ECE', 'Mechanical', 'Civil']);
-  const [sections, setSections] = useState(['A', 'B', 'C']);
-  const [years, setYears] = useState(['1st Year', '2nd Year', '3rd Year', '4th Year']);
+  // Display mappings
+  const yearNames = {
+    '1': '1st Year',
+    '2': '2nd Year',
+    '3': '3rd Year',
+    '4': '4th Year'
+  };
 
-  // ID mappings for filters
-  const yearToId = {
-    '1st Year': '1',
-    '2nd Year': '2',
-    '3rd Year': '3',
-    '4th Year': '4'
+  const branchNames = {
+    '1': 'CSE',
+    '2': 'ECE',
+    '3': 'CSM',
+    '4': 'CSD',
+    '5': 'EEE',
+    '6': 'CE',
+    '7': 'ME'
   };
-  
-  const branchToId = {
-    'CSE': '1',
-    'ECE': '2',
-    'Mechanical': '3',
-    'Civil': '4'
+
+  const sectionNames = {
+    '1': 'A',
+    '2': 'B',
+    '3': 'C'
   };
-  
-  const sectionToId = {
-    'A': '1',
-    'B': '2',
-    'C': '3'
+
+  // Define available sections per branch
+  const branchSections = {
+    '1': ['1', '2', '3'], // CSE - 3 sections
+    '2': ['1', '2'],      // ECE - 2 sections
+    '3': ['1', '2'],      // CSM - 2 sections
+    '4': ['1'],           // CSD - 1 section
+    '5': ['1'],           // EEE - 1 section
+    '6': ['1'],           // CE - 1 section
+    '7': ['1']            // ME - 1 section
   };
+
+  // Always show all years
+  const getAllYears = () => ['1', '2', '3', '4'];
+
+  // Always show all branches
+  const getAllBranches = () => ['1', '2', '3', '4', '5', '6', '7'];
+
+  const getSectionOptions = (branchValue) => {
+    const base = [{ value: 'all', label: 'All Sections' }];
+    if (!branchValue || branchValue === 'all') {
+      return base.concat(
+        Object.keys(sectionNames).map(k => ({ value: k, label: `Section ${sectionNames[k]}` }))
+      );
+    }
+    const allowed = branchSections[branchValue] || ['1'];
+    return base.concat(allowed.map(k => ({ value: k, label: `Section ${sectionNames[k] || k}` })));
+  };
+
+  const getDynamicSectionOptions = (branchValue) => {
+    return getSectionOptions(branchValue);
+  };
+
+  // Reset section when branch changes
+  useEffect(() => {
+    const branch = filters.branch;
+    if (!branch || branch === 'all') return;
+    const allowed = branchSections[branch] || ['1'];
+    if (filters.section !== 'all' && !allowed.includes(filters.section)) {
+      setFilters(prev => ({ ...prev, section: 'all' }));
+    }
+  }, [filters.branch]);
 
   useEffect(() => {
     loadStudents();
-  }, [filters]);
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [students, filters]);
 
   const loadStudents = async () => {
     try {
       setLoading(true);
       setError('');
       
-      // Build filters object - only include non-empty values
-      const apiFilters = {};
-      if (filters.year) {
-        const yearId = yearToId[filters.year];
-        if (yearId) apiFilters.year = yearId;
-        console.log('Filter: year', filters.year, '-> ID:', yearId);
-      }
-      if (filters.branch) {
-        const branchId = branchToId[filters.branch];
-        if (branchId) apiFilters.branch = branchId;
-        console.log('Filter: branch', filters.branch, '-> ID:', branchId);
-      }
-      if (filters.section) {
-        const sectionId = sectionToId[filters.section];
-        if (sectionId) apiFilters.section = sectionId;
-        console.log('Filter: section', filters.section, '-> ID:', sectionId);
-      }
+      // Fetch from API - real data only
+      const data = await managementService.getAllStudents();
       
-      console.log('Making API call with filters:', apiFilters);
-      const data = await managementService.getAllStudents(apiFilters);
-      
-      // Check if data is valid
-      if (!data) {
-        console.error('API returned null or undefined');
+      if (Array.isArray(data)) {
+        console.log(`✓ Loaded ${data.length} students from API`);
+        setStudents(data);
+        setSelectedStudent(null);
+      } else {
         setStudents([]);
         setSelectedStudent(null);
-        setLoading(false);
-        return;
       }
-      
-      if (!Array.isArray(data)) {
-        console.error('API returned non-array response:', typeof data);
-        setStudents([]);
-        setSelectedStudent(null);
-        setLoading(false);
-        return;
-      }
-      
-      console.log('API returned', data.length, 'students');
-      setStudents(data);
-      setSelectedStudent(data.length > 0 ? data[0] : null);
-      setLoading(false);
-      
     } catch (err) {
-      console.error('ERROR LOADING STUDENTS');
-      console.error('Exception:', err);
-      if (err.response) {
-        console.error('HTTP Status:', err.response.status);
-        console.error('Error Data:', err.response.data);
-      }
-      if (err.request) {
-        console.error('No response received from server');
-      }
-      if (err.message) {
-        console.error('Error Message:', err.message);
-      }
-      
-      // Extract error message from response
-      let errorMsg = 'Failed to load students';
-      if (err.response && err.response.data && err.response.data.error) {
-        errorMsg = err.response.data.error;
-      } else if (err.response && err.response.status === 404) {
-        errorMsg = 'Employee record not found. Please contact administrator.';
-      } else if (err.response && err.response.status === 500) {
-        errorMsg = 'Server error while loading students. Check backend logs.';
-      }
-      
-      // IMPORTANT: Still try loading demo data even if error
-      setError(`${errorMsg} - using demo data`);
-      setStudents([
-        {
-          id: 1,
-          name: 'John Doe',
-          rollNo: '4YCS001',
-          branch: 'CSE',
-          year: '4th Year',
-          section: 'A',
-          phone: '9876543210',
-          email: 'john@college.edu',
-          feeStatus: 'Paid',
-          totalFee: 100000,
-          paidAmount: 100000,
-          remainingAmount: 0,
-          libraryFine: 0,
-          equipmentFine: 0,
-          crtFeeStatus: 'Paid'
-        },
-        {
-          id: 2,
-          name: 'Alice Smith',
-          rollNo: '4YCS002',
-          branch: 'CSE',
-          year: '4th Year',
-          section: 'A',
-          phone: '9876543211',
-          email: 'alice@college.edu',
-          feeStatus: 'Pending',
-          totalFee: 100000,
-          paidAmount: 50000,
-          remainingAmount: 50000,
-          libraryFine: 500,
-          equipmentFine: 1000,
-          crtFeeStatus: 'Pending'
-        },
-        {
-          id: 3,
-          name: 'Bob Johnson',
-          rollNo: '4YCS003',
-          branch: 'CSE',
-          year: '4th Year',
-          section: 'B',
-          phone: '9876543212',
-          email: 'bob@college.edu',
-          feeStatus: 'Paid',
-          totalFee: 100000,
-          paidAmount: 100000,
-          remainingAmount: 0,
-          libraryFine: 0,
-          equipmentFine: 0,
-          crtFeeStatus: 'Paid'
-        }
-      ]);
-      setSelectedStudent({
-        id: 1,
-        name: 'John Doe',
-        rollNo: '4YCS001',
-        branch: 'CSE',
-        year: '4th Year',
-        section: 'A',
-        phone: '9876543210',
-        email: 'john@college.edu',
-        feeStatus: 'Paid',
-        totalFee: 100000,
-        paidAmount: 100000,
-        remainingAmount: 0,
-        libraryFine: 0,
-        equipmentFine: 0,
-        crtFeeStatus: 'Paid'
-      });
+      console.error('❌ Error loading students:', err.response?.data || err.message);
+      setError(`Failed to load students: ${err.response?.data?.error || err.message}`);
+      setStudents([]);
+      setSelectedStudent(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFilterChange = (field, value) => {
-    setFilters({...filters, [field]: value});
-  };
+  const applyFilters = () => {
+    let filtered = students;
 
-  // Use the data as-is from the API (already filtered by backend)
-  const displayedStudents = students;
+    if (filters.year !== 'all') {
+      filtered = filtered.filter(s => s.year_id?.toString() === filters.year);
+    }
+
+    if (filters.branch !== 'all') {
+      filtered = filtered.filter(s => s.branch_id?.toString() === filters.branch);
+    }
+
+    if (filters.section !== 'all') {
+      filtered = filtered.filter(s => s.section_id?.toString() === filters.section);
+    }
+
+    setFilteredStudents(filtered);
+    if (filtered.length > 0 && !filtered.includes(selectedStudent)) {
+      setSelectedStudent(filtered[0]);
+    }
+  };
 
   return (
     <div className="mgmt-students-container">
-      {error && <div className="mgmt-error-banner">{error}</div>}
+      {error && <div className="error-banner">{error}</div>}
 
-      <div className="mgmt-page-header">
-        <h1>Student Management</h1>
-        <p className="mgmt-page-subtitle">View and manage student information and fees</p>
+      {/* HEADER */}
+      <div className="page-header">
+        <h1>💳 Student Fees Management</h1>
+        <p className="page-subtitle">View and manage student fee information and payment status</p>
       </div>
 
-      {/* Filters */}
-      <div className="mgmt-students-filters">
-        <div>
-          <label>Year</label>
-          <select value={filters.year} onChange={(e) => handleFilterChange('year', e.target.value)}>
-            <option value="">All Years</option>
-            {years.map(year => <option key={year} value={year}>{year}</option>)}
-          </select>
-        </div>
-        <div>
-          <label>Branch</label>
-          <select value={filters.branch} onChange={(e) => handleFilterChange('branch', e.target.value)}>
-            <option value="">All Branches</option>
-            {branches.map(branch => <option key={branch} value={branch}>{branch}</option>)}
-          </select>
-        </div>
-        <div>
-          <label>Section</label>
-          <select value={filters.section} onChange={(e) => handleFilterChange('section', e.target.value)}>
-            <option value="">All Sections</option>
-            {sections.map(section => <option key={section} value={section}>Section {section}</option>)}
-          </select>
-        </div>
-      </div>
+      <div className="students-wrapper">
+        {/* LEFT PANEL - STUDENTS LIST */}
+        <section className="students-list-panel">
+          {/* FILTERS */}
+          <section className="filters-section">
+            <div className="filter-group">
+              <label>Year</label>
+              <select value={filters.year} onChange={(e) => setFilters({...filters, year: e.target.value})}>
+                <option value="all">All Years</option>
+                {getAllYears().map(y => (
+                  <option key={y} value={y}>{yearNames[y] || `${y}th Year`}</option>
+                ))}
+              </select>
+            </div>
 
-      {/* Student List and Detail */}
-      <div className="mgmt-student-list-wrapper">
-        {/* Student List */}
-        <div className="mgmt-student-list">
-          <div className="mgmt-student-table-header">
-            <div>Name</div>
-            <div>Roll No</div>
-            <div>Branch / Year</div>
-            <div>Phone</div>
-            <div>Fee Status</div>
+            <div className="filter-group">
+              <label>Branch</label>
+              <select value={filters.branch} onChange={(e) => setFilters({...filters, branch: e.target.value})}>
+                <option value="all">All Branches</option>
+                {getAllBranches().map(b => (
+                  <option key={b} value={b}>{branchNames[b] || `Branch ${b}`}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label>Section</label>
+              <select value={filters.section} onChange={(e) => setFilters({...filters, section: e.target.value})}>
+                {getDynamicSectionOptions(filters.branch).map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          {/* STUDENTS TABLE */}
+          <div className="students-table-wrapper">
+            {filteredStudents.length === 0 ? (
+              <div className="empty-state">
+                <span className="empty-icon">👥</span>
+                <h2>No students found</h2>
+                <p>Try adjusting your filters</p>
+              </div>
+            ) : (
+              <div className="students-table">
+                <div className="table-header">
+                  <div className="col-name">Name</div>
+                  <div className="col-roll">Roll No</div>
+                  <div className="col-total">Total Fee</div>
+                  <div className="col-status">Status</div>
+                </div>
+                <div className="table-body">
+                  {filteredStudents.map((student, idx) => (
+                    <div
+                      key={student.id}
+                      className={`table-row ${selectedStudent?.id === student.id ? 'active' : ''}`}
+                      onClick={() => setSelectedStudent(student)}
+                      style={{ animationDelay: `${idx * 0.05}s` }}
+                    >
+                      <div className="col-name">
+                        <div className="student-avatar">{student.name?.charAt(0) || ''}</div>
+                        <div className="student-info">
+                          <div className="student-name">{student.name}</div>
+                          <div className="student-email">{student.email}</div>
+                        </div>
+                      </div>
+                      <div className="col-roll">{student.roll_no}</div>
+                      <div className="col-total">₹{student.fee_total || 0}</div>
+                      <div className="col-status">
+                        {student.fee_remaining === 0 ? (
+                          <span className="fee-badge clear">✓ Paid</span>
+                        ) : (
+                          <span className="fee-badge pending">₹{student.fee_remaining}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          {displayedStudents.map((student) => (
-            <div
-              key={student.id}
-              className="mgmt-student-row"
-              onClick={() => setSelectedStudent(student)}
-              style={{opacity: selectedStudent?.id === student.id ? 1 : 0.7}}
-            >
-              <div className="mgmt-student-name">{student.name}</div>
-              <div className="mgmt-student-roll">{student.roll_no}</div>
-              <div className="mgmt-student-info">{student.branch} / {student.year}</div>
-              <div className="mgmt-student-info">{student.phone}</div>
-              <div>
-                <span className="mgmt-fee-status pending">
-                  ⏳ View Details
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        </section>
 
-        {/* Student Detail Panel */}
-        {selectedStudent ? (
-          <div className="mgmt-student-detail-panel">
-            <div className="mgmt-detail-header">
-              <div className="mgmt-detail-avatar">
-                {selectedStudent.name?.charAt(0).toUpperCase()}
-              </div>
-              <div className="mgmt-detail-header-info">
-                <h3>{selectedStudent.name}</h3>
-                <p>{selectedStudent.rollNo}</p>
+        {/* RIGHT PANEL - STUDENT DETAILS */}
+        {selectedStudent && (
+          <section className="student-details-panel">
+            {/* DETAIL HEADER */}
+            <div className="detail-header">
+              <div className="detail-avatar-large">{selectedStudent.name?.charAt(0) || ''}</div>
+              <h2>{selectedStudent.name}</h2>
+              <p className="detail-subtitle">{yearNames[selectedStudent.year_id?.toString()]} • {branchNames[selectedStudent.branch_id?.toString()]} • Section {sectionNames[selectedStudent.section_id?.toString()]}</p>
+            </div>
+
+            {/* CONTACT INFO */}
+            <div className="detail-section">
+              <h3 className="section-title">📞 Personal Information</h3>
+              <div className="info-grid">
+                <div className="info-item">
+                  <span className="info-label">Email</span>
+                  <span className="info-value">{selectedStudent.email}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Phone</span>
+                  <span className="info-value">{selectedStudent.phone_no}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Roll Number</span>
+                  <span className="info-value">{selectedStudent.roll_no}</span>
+                </div>
               </div>
             </div>
 
-            {/* Personal Information */}
-            <div className="mgmt-detail-section">
-              <h4>Personal Information</h4>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Email</div>
-                <div className="mgmt-detail-value">{selectedStudent.email}</div>
-              </div>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Phone</div>
-                <div className="mgmt-detail-value">{selectedStudent.phone}</div>
-              </div>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Roll No</div>
-                <div className="mgmt-detail-value">{selectedStudent.roll_no}</div>
-              </div>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Branch</div>
-                <div className="mgmt-detail-value">{selectedStudent.branch}</div>
-              </div>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Year</div>
-                <div className="mgmt-detail-value">{selectedStudent.year}</div>
-              </div>
-              <div className="mgmt-detail-item">
-                <div className="mgmt-detail-label">Section</div>
-                <div className="mgmt-detail-value">{selectedStudent.section}</div>
+            {/* FEE BREAKDOWN */}
+            <div className="detail-section">
+              <h3 className="section-title">💰 Fee Details</h3>
+              <div className="fee-breakdown">
+                <div className="fee-item">
+                  <span className="fee-label">Total Fee</span>
+                  <span className="fee-value">₹{selectedStudent.fee_total || 0}</span>
+                </div>
+                <div className="fee-item">
+                  <span className="fee-label">Paid Amount</span>
+                  <span className="fee-value paid">₹{selectedStudent.fee_paid || 0}</span>
+                </div>
+                <div className="fee-item highlight">
+                  <span className="fee-label">Remaining</span>
+                  <span className={`fee-value ${selectedStudent.fee_remaining === 0 ? 'paid' : 'pending'}`}>
+                    ₹{selectedStudent.fee_remaining || 0}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Fee Breakdown */}
-            <div className="mgmt-detail-section">
-              <h4>Fee Details</h4>
-              <p style={{color: '#999', fontSize: '0.9rem'}}>Fee details available in the Fees tab</p>
+            {/* FINE DETAILS */}
+            <div className="detail-section">
+              <h3 className="section-title">⚠️ Additional Charges</h3>
+              <div className="fine-breakdown">
+                <div className="fine-item">
+                  <span className="fine-label">Library Fine</span>
+                  <span className="fine-value">₹{selectedStudent.library_fine || 0}</span>
+                </div>
+                <div className="fine-item">
+                  <span className="fine-label">Equipment Fine</span>
+                  <span className="fine-value">₹{selectedStudent.equipment_fine || 0}</span>
+                </div>
+                <div className="fine-item">
+                  <span className="fine-label">CRT Fee Status</span>
+                  <span className={`fine-value ${selectedStudent.paid_crt_fee ? 'paid' : 'pending'}`}>
+                    {selectedStudent.paid_crt_fee ? '✓ Paid' : 'Pending'}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="mgmt-student-detail-panel">
-            <div className="mgmt-empty-detail">
-              <p>Select a student to view details</p>
+
+            {/* PAYMENT STATUS */}
+            <div className="detail-section">
+              <h3 className="section-title">📊 Payment Status Summary</h3>
+              <div className="status-summary">
+                <div className={`status-badge ${selectedStudent.fee_remaining === 0 ? 'success' : 'warning'}`}>
+                  {selectedStudent.fee_remaining === 0 ? '✓ ALL FEES PAID' : `₹${selectedStudent.fee_remaining} PENDING`}
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
         )}
       </div>
     </div>

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import TPCellEmployee
 from students.models import Student, StudentBacklog, StudentExamData
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Prefetch
 import logging
 
 logger = logging.getLogger(__name__)
@@ -45,6 +45,68 @@ def tpcell_profile(request):
         'designation': emp.designation,
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def tpcell_get_students(request):
+    """Get all students with optional filtering by year, branch, and section"""
+    try:
+        # Get filter parameters
+        year = request.query_params.get('year')
+        branch = request.query_params.get('branch')
+        section = request.query_params.get('section')
+        
+        # Start with all students
+        students_qs = Student.objects.all()
+        
+        # Apply filters if provided
+        if year and year != 'all':
+            students_qs = students_qs.filter(year_id=int(year))
+        
+        if branch and branch != 'all':
+            students_qs = students_qs.filter(branch_id=int(branch))
+        
+        if section and section != 'all':
+            students_qs = students_qs.filter(sec_id=int(section))
+        
+        # Get backlogs count and CGPA for each student
+        students_data = []
+        for student in students_qs:
+            backlogs_count = StudentBacklog.objects.filter(student_id=student.student_id).count()
+            
+            # Calculate CGPA from exam data if available
+            exam_records = StudentExamData.objects.filter(student_id=student.student_id)
+            cgpa = 0.0
+            if exam_records.exists():
+                total_marks = 0
+                total_records = 0
+                for exam in exam_records:
+                    total_marks += exam.mid_marks + exam.quiz_marks + exam.assignment_marks
+                    total_records += 1
+                # Convert to 10-point scale (max total = 30 per exam)
+                if total_records > 0:
+                    cgpa = round((total_marks / (total_records * 30)) * 10, 2)
+            
+            students_data.append({
+                'id': student.student_id,
+                'name': f"{student.first_name} {student.last_name}",
+                'email': student.email,
+                'roll_no': student.roll_no,
+                'year_id': student.year_id,
+                'branch_id': student.branch_id,
+                'section_id': student.sec_id,
+                'phone_no': student.phone_no or '',
+                'cgpa': cgpa,
+                'backlogs': backlogs_count,
+            })
+        
+        logger.info(f"✓ TP Cell: Retrieved {len(students_data)} students with filters (year={year}, branch={branch}, section={section})")
+        return Response(students_data, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        logger.error(f"✗ Error retrieving TP Cell students: {str(e)}")
+        return Response({'error': f'Error retrieving students: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])

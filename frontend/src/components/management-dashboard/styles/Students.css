@@ -1,294 +1,633 @@
-/* ===== STUDENTS PAGE STYLES ===== */
+/* ===== MANAGEMENT STUDENTS PAGE ===== */
 
 .mgmt-students-container {
-  animation: mgmt-fadeIn 0.5s ease-out;
+  animation: pageAnimation 0.5s ease-out;
 }
 
-/* ===== FILTER SECTION ===== */
-.mgmt-students-filters {
+.students-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* ===== STUDENT LIST CONTAINER ===== */
-.mgmt-student-list-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  align-items: start;
+  margin-top: 2rem;
+  min-height: 70vh;
 }
 
-/* ===== STUDENT LIST TABLE ===== */
-.mgmt-student-list {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.mgmt-student-table-header {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  padding: 1.25rem;
-  display: grid;
-  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
-  gap: 1rem;
-  font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.mgmt-student-row {
-  display: grid;
-  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1.25rem;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.mgmt-student-row:hover {
-  background: #f5f7fa;
-}
-
-.mgmt-student-name {
-  font-weight: 500;
-  color: #333;
-}
-
-.mgmt-student-roll {
-  color: #667eea;
-  font-weight: 600;
-}
-
-.mgmt-student-info {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* ===== FEE STATUS BADGE ===== */
-.mgmt-fee-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.mgmt-fee-status.paid {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.mgmt-fee-status.pending {
-  background: #fff3e0;
-  color: #f57f17;
-}
-
-/* ===== STUDENT DETAIL PANEL ===== */
-.mgmt-student-detail-panel {
+/* ===== FILTERS SECTION ===== */
+.filters-section {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 10px;
-  animation: mgmt-slideUp 0.5s ease-out;
+  margin-bottom: 2rem;
+  border: 1px solid #e8ecf5;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.06);
+  animation: slideDown 0.5s ease-out 0.1s backwards;
 }
 
-.mgmt-detail-header {
+.filter-group {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #e0e0e0;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
 }
 
-.mgmt-detail-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.mgmt-detail-header-info h3 {
-  margin: 0;
-  color: #333;
-  font-size: 1.1rem;
-}
-
-.mgmt-detail-header-info p {
-  margin: 0;
-  color: #888;
-  font-size: 0.85rem;
-}
-
-/* ===== PERSONAL INFO SECTION ===== */
-.mgmt-detail-section {
-  margin-bottom: 1.5rem;
-}
-
-.mgmt-detail-section h4 {
-  color: #333;
-  font-size: 0.95rem;
-  margin: 0 0 1rem 0;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.mgmt-detail-item {
-  margin-bottom: 0.75rem;
-}
-
-.mgmt-detail-label {
-  color: #888;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-.mgmt-detail-value {
-  color: #333;
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin-top: 0.25rem;
-}
-
-/* ===== FEE BREAKDOWN ===== */
-.mgmt-fee-breakdown {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  border-radius: 10px;
-  padding: 1rem;
-  margin-top: 0.75rem;
-}
-
-.mgmt-fee-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.mgmt-fee-item:last-child {
+.filter-group:last-child {
   margin-bottom: 0;
 }
 
-.mgmt-fee-label {
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.filter-group select {
+  padding: 0.7rem 1rem;
+  border: 2px solid #e8ecf5;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #555;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.filter-group select:hover {
+  border-color: #667eea;
+  background-color: #f8f9ff;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ===== STUDENTS LIST PANEL ===== */
+.students-list-panel {
+  background: white;
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid #e8ecf5;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  display: flex;
+  flex-direction: column;
+  animation: slideInLeft 0.5s ease-out;
+  height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* ===== STUDENTS TABLE ===== */
+.students-table-wrapper {
+  flex: 1;
+  border-top: 1px solid #e8ecf5;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.students-table-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.students-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.students-table-wrapper::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 2px solid #e8ecf5;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideUp 0.3s ease-out backwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-row:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  transform: translateX(4px);
+}
+
+.table-row.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+}
+
+.table-row.active .student-email,
+.table-row.active .col-roll,
+.table-row.active .col-total,
+.table-row.active .col-status {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.col-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.col-roll,
+.col-total,
+.col-status {
+  text-align: center;
+  font-size: 0.9rem;
   color: #666;
 }
 
-.mgmt-fee-amount {
+.student-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.table-row.active .student-avatar {
+  background: white;
+  color: #667eea;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.student-name {
+  font-weight: 600;
   color: #333;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.student-email {
+  font-size: 0.8rem;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fee-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.fee-badge.clear {
+  background: #c8e6c9;
+  color: #2e7d32;
+}
+
+.fee-badge.pending {
+  background: #ffccbc;
+  color: #d84315;
+}
+
+.table-row.active .fee-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+/* ===== STUDENT DETAILS PANEL ===== */
+.student-details-panel {
+  background: white;
+  border-radius: 14px;
+  padding: 2rem;
+  border: 1px solid #e8ecf5;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+  animation: slideInRight 0.5s ease-out;
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.student-details-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.student-details-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.student-details-panel::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.detail-header {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e8ecf5;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out 0.2s backwards;
+}
+
+.detail-avatar-large {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2rem;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.detail-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.detail-subtitle {
+  margin: 0;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* ===== DETAIL SECTIONS ===== */
+.detail-section {
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out backwards;
+}
+
+.section-title {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-item {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 3px solid #667eea;
+  transition: all 0.2s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.info-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.4rem;
+}
+
+.info-value {
+  display: block;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* ===== FEE BREAKDOWN ===== */
+.fee-breakdown {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #667eea;
+}
+
+.fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.fee-item:last-child {
+  border-bottom: none;
+}
+
+.fee-item.highlight {
+  padding: 1rem 0;
+  background: rgba(102, 126, 234, 0.05);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0.5rem -1.5rem;
+  padding: 1rem 1rem;
+  border-radius: 8px;
   font-weight: 600;
 }
 
-/* ===== EMPTY STATE ===== */
-.mgmt-empty-detail {
-  text-align: center;
-  padding: 2rem 0;
+.fee-label {
+  color: #666;
+  font-weight: 500;
 }
 
-.mgmt-empty-detail p {
+.fee-value {
+  color: #333;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.fee-value.paid {
+  color: #2e7d32;
+}
+
+.fee-value.pending {
+  color: #d84315;
+}
+
+/* ===== FINE BREAKDOWN ===== */
+.fine-breakdown {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, rgba(233, 30, 99, 0.05) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #f44336;
+}
+
+.fine-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(244, 67, 54, 0.1);
+}
+
+.fine-item:last-child {
+  border-bottom: none;
+}
+
+.fine-label {
+  color: #d84315;
+  font-weight: 500;
+}
+
+.fine-value {
+  color: #333;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.fine-value.paid {
+  color: #2e7d32;
+}
+
+.fine-value.pending {
+  color: #d84315;
+}
+
+/* ===== STATUS SUMMARY ===== */
+.status-summary {
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  animation: slideUp 0.5s ease-out;
+}
+
+.status-badge.success {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.status-badge.warning {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
   color: #999;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+  font-size: 1.3rem;
+}
+
+.empty-state p {
   margin: 0;
   font-size: 0.95rem;
 }
 
-/* ===== LOADING STATE ===== */
-.mgmt-student-skeleton {
-  display: grid;
-  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1.25rem;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.mgmt-skeleton-item {
-  height: 20px;
-  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-  background-size: 200% 100%;
-  border-radius: 4px;
-  animation: mgmt-shimmer 1.5s infinite;
-}
-
-@keyframes mgmt-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+/* ===== ERROR BANNER ===== */
+.error-banner {
+  background: #ffebee;
+  color: #c62828;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #c62828;
+  animation: slideDown 0.3s ease-out;
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .mgmt-student-list-wrapper {
+@media (max-width: 1200px) {
+  .students-wrapper {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
-  .mgmt-student-detail-panel {
-    position: static;
-    order: -1;
+  .student-details-panel {
+    max-height: none;
+  }
+
+  .students-list-panel {
+    max-height: none;
   }
 }
 
 @media (max-width: 768px) {
-  .mgmt-students-filters {
-    grid-template-columns: repeat(2, 1fr);
+  .students-wrapper {
+    grid-template-columns: 1fr;
   }
 
-  .mgmt-student-table-header,
-  .mgmt-student-row {
-    grid-template-columns: 1fr 1fr 1fr;
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr auto;
   }
 
-  .mgmt-student-roll {
+  .col-total {
     display: none;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-header {
+    padding-bottom: 1rem;
+  }
+
+  .student-details-panel {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .mgmt-students-filters {
-    grid-template-columns: 1fr;
+  .filters-section {
+    padding: 1rem;
   }
 
-  .mgmt-student-table-header,
-  .mgmt-student-row {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .mgmt-student-info {
-    display: none;
-  }
-
-  .mgmt-detail-header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .mgmt-detail-section h4 {
+  .filter-group label {
     font-size: 0.85rem;
   }
+
+  .filter-group select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+.page-header {
+  animation: slideDown 0.4s ease-out;
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: #888;
+  font-size: 0.95rem;
 }

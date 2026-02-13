@@ -17,7 +17,7 @@ const AdminDashboard = () => {
           <h2>Admin Control Panel</h2>
           <div className="admin-info">
             <p>Welcome to the Admin Dashboard. Use this panel to manage all system components.</p>
-          </div>
+          </div>1
         </section>
 
         <section className="dashboard-section">

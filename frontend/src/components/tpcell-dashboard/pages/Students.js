@@ -1,215 +1,330 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { tpcellService } from '../../../services/api';
 import '../styles/Common.css';
 import '../styles/Students.css';
 
 const Students = () => {
+  const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [filters, setFilters] = useState({
     year: 'all',
     branch: 'all',
     section: 'all',
   });
-  const [students, setStudents] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const yearOptions = ['all', '1', '2', '3', '4'];
-  const branchOptions = ['all', 'CSE', 'ECE', 'ME', 'CE'];
-  const sectionOptions = ['all', 'A', 'B', 'C'];
-
-  const handleFilterChange = (filterName, value) => {
-    setFilters((prev) => ({ ...prev, [filterName]: value }));
+  // Year ID to display mapping
+  const yearNames = {
+    '1': '1st Year',
+    '2': '2nd Year',
+    '3': '3rd Year',
+    '4': '4th Year'
   };
 
-  const handleApplyFilters = async () => {
+  // Map branch codes used in UI/DB to internal numeric IDs (as strings)
+  const branchMap = {
+    'CSE': '1', 'ECE': '2', 'CSM': '3', 'CSD': '4',
+    'EEE': '5', 'CE': '6', 'ME': '7'
+  };
+
+  const branchNames = {
+    '1': 'CSE',
+    '2': 'ECE',
+    '3': 'CSM',
+    '4': 'CSD',
+    '5': 'EEE',
+    '6': 'CE',
+    '7': 'ME'
+  };
+
+  const sectionNames = {
+    '1': 'A',
+    '2': 'B',
+    '3': 'C'
+  };
+
+  // Define available sections per branch based on TP Cell requirements
+  // CSE: 3 sections, ECE: 2, CSM: 2, CSD: 1, EEE: 1, CE: 1, ME: 1
+  const branchSections = {
+    '1': ['1', '2', '3'], // CSE has 3 sections (A, B, C)
+    '2': ['1', '2'],      // ECE has 2 sections (A, B)
+    '3': ['1', '2'],      // CSM has 2 sections (A, B)
+    '4': ['1'],           // CSD has 1 section (A)
+    '5': ['1'],           // EEE has 1 section (A)
+    '6': ['1'],           // CE has 1 section (A)
+    '7': ['1']            // ME has 1 section (A)
+  };
+
+  // Always show all possible years
+  const getAllYears = () => {
+    return ['1', '2', '3', '4'];
+  };
+
+  // Always show all possible branches
+  const getAllBranches = () => {
+    return ['1', '2', '3', '4', '5', '6', '7'];
+  };
+
+  const getSectionOptions = (branchValue) => {
+    const base = [{ value: 'all', label: 'All Sections' }];
+    if (!branchValue || branchValue === 'all') {
+      return base.concat(
+        Object.keys(sectionNames).map(k => ({ value: k, label: `Section ${sectionNames[k]}` }))
+      );
+    }
+
+    const allowed = branchSections[branchValue] || ['1'];
+    return base.concat(allowed.map(k => ({ value: k, label: `Section ${sectionNames[k] || k}` })));
+  };
+
+  const getDynamicSectionOptions = (branchValue) => {
+    return getSectionOptions(branchValue);
+  };
+
+  // Reset section filter when branch changes
+  useEffect(() => {
+    const branch = filters.branch;
+    if (!branch || branch === 'all') return;
+    const allowed = branchSections[branch] || ['1'];
+    if (filters.section !== 'all' && !allowed.includes(filters.section)) {
+      setFilters(prev => ({ ...prev, section: 'all' }));
+    }
+  }, [filters.branch]);
+
+  useEffect(() => {
+    loadStudents();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [students, filters]);
+
+  const loadStudents = async () => {
     try {
       setLoading(true);
-      // TODO: Fetch filtered students from API
-      // const data = await studentService.getFilteredStudents(filters);
-      // setStudents(data);
+      setError('');
+      
+      // Fetch from API - no fallback, use real data only
+      const data = await tpcellService.getAllStudents();
+      
+      if (Array.isArray(data)) {
+        // Normalize branch_id when backend may return codes (e.g., 'CSE')
+        const normalized = data.map(s => {
+          let branchId = s.branch_id;
+          if (typeof branchId === 'string') {
+            const up = branchId.toUpperCase();
+            if (branchMap[up]) {
+              branchId = Number(branchMap[up]);
+            } else if (!isNaN(Number(branchId))) {
+              branchId = Number(branchId);
+            }
+          } else if (!branchId && s.branch && typeof s.branch === 'string') {
+            const up = s.branch.toUpperCase();
+            if (branchMap[up]) branchId = Number(branchMap[up]);
+          }
+          return { ...s, branch_id: branchId };
+        });
+
+        setStudents(normalized);
+        setSelectedStudent(null);
+        console.log(`✓ Loaded ${normalized.length} students from API`);
+      } else {
+        setStudents([]);
+        setSelectedStudent(null);
+      }
     } catch (err) {
-      console.error('Failed to load students:', err);
+      console.error('❌ Error loading students:', err.response?.data || err.message);
+      setError(`Failed to load students: ${err.response?.data?.error || err.message}`);
+      setStudents([]);
+      setSelectedStudent(null);
     } finally {
       setLoading(false);
     }
   };
 
+  const applyFilters = () => {
+    let filtered = students;
+
+    if (filters.year !== 'all') {
+      filtered = filtered.filter(s => s.year_id?.toString() === filters.year);
+    }
+
+    if (filters.branch !== 'all') {
+      filtered = filtered.filter(s => s.branch_id?.toString() === filters.branch);
+    }
+
+    if (filters.section !== 'all') {
+      filtered = filtered.filter(s => s.section_id?.toString() === filters.section);
+    }
+
+    setFilteredStudents(filtered);
+    if (filtered.length > 0 && !filtered.includes(selectedStudent)) {
+      setSelectedStudent(filtered[0]);
+    }
+  };
+
   return (
-    <div className="tpcell-students">
+    <div className="tpcell-students-container">
+      {error && <div className="error-banner">{error}</div>}
+
+      {/* HEADER */}
       <div className="page-header">
-        <h2>👥 Student Management</h2>
-        <p>View and manage student details for placement eligibility</p>
+        <h1>👥 Student Management</h1>
+        <p className="page-subtitle">View and manage students for placement eligibility</p>
       </div>
 
-      {/* Filters Section */}
-      <section className="filters-section">
-        <div className="filter-group">
-          <label htmlFor="year-filter">Year</label>
-          <select
-            id="year-filter"
-            value={filters.year}
-            onChange={(e) => handleFilterChange('year', e.target.value)}
-          >
-            {yearOptions.map((option) => (
-              <option key={option} value={option}>
-                {option === 'all' ? 'All Years' : `Year ${option}`}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="branch-filter">Branch</label>
-          <select
-            id="branch-filter"
-            value={filters.branch}
-            onChange={(e) => handleFilterChange('branch', e.target.value)}
-          >
-            {branchOptions.map((option) => (
-              <option key={option} value={option}>
-                {option === 'all' ? 'All Branches' : option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="section-filter">Section</label>
-          <select
-            id="section-filter"
-            value={filters.section}
-            onChange={(e) => handleFilterChange('section', e.target.value)}
-          >
-            {sectionOptions.map((option) => (
-              <option key={option} value={option}>
-                {option === 'all' ? 'All Sections' : `Section ${option}`}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button className="apply-filters-btn" onClick={handleApplyFilters} disabled={loading}>
-          {loading ? 'Loading...' : 'Apply Filters'}
-        </button>
-      </section>
-
-      {/* Student List */}
-      <section className="students-section">
-        {students.length > 0 ? (
-          <div className="students-table-wrapper">
-            <table className="students-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Roll No</th>
-                  <th>Branch</th>
-                  <th>Year</th>
-                  <th>Attendance %</th>
-                  <th>Avg Marks</th>
-                  <th>Backlogs</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.map((student) => (
-                  <tr key={student.id}>
-                    <td>{student.name}</td>
-                    <td>{student.roll_no}</td>
-                    <td>{student.branch}</td>
-                    <td>{student.year}</td>
-                    <td>{student.attendance}%</td>
-                    <td>{student.avg_marks}</td>
-                    <td>
-                      <span className={`backlog-badge ${student.has_backlogs ? 'yes' : 'no'}`}>
-                        {student.has_backlogs ? 'Yes' : 'No'}
-                      </span>
-                    </td>
-                    <td>
-                      <button
-                        className="view-btn"
-                        onClick={() => setSelectedStudent(student)}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
+      <div className="students-wrapper">
+        {/* LEFT PANEL - STUDENTS LIST */}
+        <section className="students-list-panel">
+          {/* FILTERS */}
+          <section className="filters-section">
+            <div className="filter-group">
+              <label>Year</label>
+              <select value={filters.year} onChange={(e) => setFilters({...filters, year: e.target.value})}>
+                <option value="all">All Years</option>
+                {getAllYears().map(y => (
+                  <option key={y} value={y}>{yearNames[y] || `${y}th Year`}</option>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-icon">🔍</div>
-            <h2>No Students Found</h2>
-            <p>Apply filters to search for students</p>
-          </div>
-        )}
-      </section>
-
-      {/* Student Detail Panel */}
-      {selectedStudent && (
-        <section className="student-detail-section">
-          <div className="detail-header">
-            <h3>Student Details</h3>
-            <button
-              className="close-btn"
-              onClick={() => setSelectedStudent(null)}
-              title="Close"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="detail-content">
-            <div className="detail-group">
-              <h4>Personal Information</h4>
-              <div className="detail-item">
-                <label>Name</label>
-                <p>{selectedStudent.name}</p>
-              </div>
-              <div className="detail-item">
-                <label>Email</label>
-                <p>{selectedStudent.email}</p>
-              </div>
-              <div className="detail-item">
-                <label>Phone</label>
-                <p>{selectedStudent.phone}</p>
-              </div>
+              </select>
             </div>
 
-            <div className="detail-group">
-              <h4>Academic Information</h4>
-              <div className="detail-item">
-                <label>Roll No</label>
-                <p>{selectedStudent.roll_no}</p>
-              </div>
-              <div className="detail-item">
-                <label>Branch</label>
-                <p>{selectedStudent.branch}</p>
-              </div>
-              <div className="detail-item">
-                <label>CGPA</label>
-                <p>{selectedStudent.cgpa}</p>
-              </div>
-              <div className="detail-item">
-                <label>Attendance</label>
-                <p>{selectedStudent.attendance}%</p>
-              </div>
+            <div className="filter-group">
+              <label>Branch</label>
+              <select value={filters.branch} onChange={(e) => setFilters({...filters, branch: e.target.value})}>
+                <option value="all">All Branches</option>
+                {getAllBranches().map(b => (
+                  <option key={b} value={b}>{branchNames[b] || `Branch ${b}`}</option>
+                ))}
+              </select>
             </div>
 
-            <div className="detail-group">
-              <h4>Backlogs</h4>
-              {selectedStudent.backlogs && selectedStudent.backlogs.length > 0 ? (
-                <ul className="backlogs-list">
-                  {selectedStudent.backlogs.map((backlog) => (
-                    <li key={backlog.id}>{backlog.course_id}</li>
+            <div className="filter-group">
+              <label>Section</label>
+              <select value={filters.section} onChange={(e) => setFilters({...filters, section: e.target.value})}>
+                {getDynamicSectionOptions(filters.branch).map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          {/* STUDENTS TABLE */}
+          <div className="students-table-wrapper">
+            {filteredStudents.length === 0 ? (
+              <div className="empty-state">
+                <span className="empty-icon">👥</span>
+                <h2>No students found</h2>
+                <p>Try adjusting your filters</p>
+              </div>
+            ) : (
+              <div className="students-table">
+                <div className="table-header">
+                  <div className="col-name">Name</div>
+                  <div className="col-roll">Roll No</div>
+                  <div className="col-cgpa">CGPA</div>
+                  <div className="col-backlogs">Backlogs</div>
+                </div>
+                <div className="table-body">
+                  {filteredStudents.map((student, idx) => (
+                    <div
+                      key={student.id}
+                      className={`table-row ${selectedStudent?.id === student.id ? 'active' : ''}`}
+                      onClick={() => setSelectedStudent(student)}
+                      style={{ animationDelay: `${idx * 0.05}s` }}
+                    >
+                      <div className="col-name">
+                        <div className="student-avatar">{student.name?.charAt(0) || ''}</div>
+                        <div className="student-info">
+                          <div className="student-name">{student.name}</div>
+                          <div className="student-email">{student.email}</div>
+                        </div>
+                      </div>
+                      <div className="col-roll">{student.roll_no}</div>
+                      <div className="col-cgpa">
+                        <span className={`cgpa-badge cgpa-${student.cgpa >= 8 ? 'high' : student.cgpa >= 7 ? 'medium' : 'low'}`}>
+                          {student.cgpa}
+                        </span>
+                      </div>
+                      <div className="col-backlogs">
+                        {student.backlogs === 0 ? (
+                          <span className="backlog-badge clear">✓ Clear</span>
+                        ) : (
+                          <span className="backlog-badge pending">{student.backlogs}</span>
+                        )}
+                      </div>
+                    </div>
                   ))}
-                </ul>
-              ) : (
-                <p className="no-backlogs">No backlogs</p>
-              )}
-            </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
-      )}
+
+        {/* RIGHT PANEL - STUDENT DETAILS */}
+        {selectedStudent && (
+          <section className="student-details-panel">
+            {/* DETAIL HEADER */}
+            <div className="detail-header">
+              <div className="detail-avatar-large">{selectedStudent.name?.charAt(0) || ''}</div>
+              <h2>{selectedStudent.name}</h2>
+              <p className="detail-subtitle">{yearNames[selectedStudent.year_id?.toString()]} • {branchNames[selectedStudent.branch_id?.toString()]} • Section {sectionNames[selectedStudent.section_id?.toString()]}</p>
+            </div>
+
+            {/* CONTACT INFO */}
+            <div className="detail-section">
+              <h3 className="section-title">📞 Contact Information</h3>
+              <div className="info-grid">
+                <div className="info-item">
+                  <span className="info-label">Email</span>
+                  <span className="info-value">{selectedStudent.email}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Phone</span>
+                  <span className="info-value">{selectedStudent.phone_no}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Roll Number</span>
+                  <span className="info-value">{selectedStudent.roll_no}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ACADEMIC STATS */}
+            <div className="detail-section">
+              <h3 className="section-title">📊 Academic Performance</h3>
+              <div className="stats-grid-detail">
+                <div className="stat-box">
+                  <span className="stat-icon">🎓</span>
+                  <span className="stat-label" style={{ color: 'white' }}>CGPA</span>
+                  <span className={`stat-value cgpa-${selectedStudent.cgpa >= 8 ? 'high' : selectedStudent.cgpa >= 7 ? 'medium' : 'low'}`}>{selectedStudent.cgpa}</span>
+                  <span className="stat-unit" style={{ color: 'white' }}>out of 10</span>
+                </div>
+                <div className="stat-box">
+                  <span className="stat-icon">📚</span>
+                  <span className="stat-label" style={{ color: 'white' }}>Backlogs</span>
+                  <span className={`stat-value ${selectedStudent.backlogs === 0 ? 'success' : 'warning'}`}>{selectedStudent.backlogs}</span>
+                  <span className="stat-unit" style={{ color: 'white' }}>pending courses</span>
+                </div>
+              </div>
+            </div>
+
+            {/* QUICK ACTIONS */}
+            <div className="detail-section">
+              <h3 className="section-title">⚡ Quick Actions</h3>
+              <div className="action-buttons">
+                <button className="action-btn primary">
+                  <span>📧</span> Send Message
+                </button>
+                <button className="action-btn secondary">
+                  <span>📋</span> View Records
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 };

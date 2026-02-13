@@ -211,6 +211,11 @@ export const tpcellService = {
     const response = await apiClient.get('/tpcell/stats/');
     return response.data;
   },
+  getAllStudents: async (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    const response = await apiClient.get(`/tpcell/students/?${params}`);
+    return response.data;
+  },
 };
 
 export const notificationService = {

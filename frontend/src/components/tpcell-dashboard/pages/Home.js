@@ -51,51 +51,58 @@ const Home = () => {
       {error && <div className="error-banner">{error}</div>}
 
       {/* TP Cell Staff Summary */}
-      <section className="home-summary">
-        <div className="summary-card">
-          <div className="summary-icon">👨‍💼</div>
-          <div className="summary-content">
-            <h3>TP Cell Officer</h3>
-            <p className="summary-name">{profile?.first_name} {profile?.last_name}</p>
-            <p className="summary-designation">{profile?.designation}</p>
+      <div className="summary-card">
+        <h2>Welcome, {profile?.first_name}!</h2>
+        <div className="summary-info">
+          <div className="summary-item">
+            <label>Full Name</label>
+            <span>{profile?.first_name} {profile?.last_name}</span>
+          </div>
+          <div className="summary-item">
+            <label>Designation</label>
+            <span>{profile?.designation}</span>
+          </div>
+          <div className="summary-item">
+            <label>Department</label>
+            <span>{profile?.department || 'TP Cell'}</span>
+          </div>
+          <div className="summary-item">
+            <label>Status</label>
+            <span className="status-badge">Active</span>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Stats Section */}
-      <section className="home-stats">
-        <div className="stat-card">
+      {/* Stats Section (styled like management) */}
+      <div className="mgmt-stats-grid">
+        <div className="mgmt-stat-card">
           <div className="stat-icon stat-icon-primary">👥</div>
-          <div className="stat-content">
-            <p className="stat-label">Total Students</p>
-            <h2 className="stat-number">{stats?.total_students || 0}</h2>
-          </div>
+          <h3>Total Students</h3>
+          <p className="stat-value">{stats?.total_students || 0}</p>
+          <span className="stat-change">Active students in system</span>
         </div>
 
-        <div className="stat-card">
+        <div className="mgmt-stat-card">
           <div className="stat-icon stat-icon-warning">⚠️</div>
-          <div className="stat-content">
-            <p className="stat-label">Students with Backlogs</p>
-            <h2 className="stat-number">{stats?.students_with_backlogs || 0}</h2>
-          </div>
+          <h3>Students with Backlogs</h3>
+          <p className="stat-value">{stats?.students_with_backlogs || 0}</p>
+          <span className="stat-change">Requiring academic attention</span>
         </div>
 
-        <div className="stat-card">
+        <div className="mgmt-stat-card">
           <div className="stat-icon stat-icon-success">✅</div>
-          <div className="stat-content">
-            <p className="stat-label">Eligible for Placement</p>
-            <h2 className="stat-number">{stats?.eligible_students || 0}</h2>
-          </div>
+          <h3>Eligible for Placement</h3>
+          <p className="stat-value">{stats?.eligible_students || 0}</p>
+          <span className="stat-change">Ready for opportunities</span>
         </div>
 
-        <div className="stat-card">
+        <div className="mgmt-stat-card">
           <div className="stat-icon stat-icon-info">📊</div>
-          <div className="stat-content">
-            <p className="stat-label">Avg. CGPA</p>
-            <h2 className="stat-number">{stats?.avg_cgpa?.toFixed(2) || 0}</h2>
-          </div>
+          <h3>Avg. CGPA</h3>
+          <p className="stat-value">{stats?.avg_cgpa?.toFixed(2) || 0}</p>
+          <span className="stat-change">Class performance metric</span>
         </div>
-      </section>
+      </div>
 
       {/* Recent Notifications */}
       <section className="home-notifications">
