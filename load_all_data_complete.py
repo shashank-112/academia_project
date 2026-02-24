@@ -71,7 +71,7 @@ if students_csv.exists():
             phone_no=str(int(row['phone_no'])),
             ssc_marks=float(row['ssc_marks']) if pd.notna(row['ssc_marks']) else None,
             inter_marks=float(row['inter_marks']) if pd.notna(row['inter_marks']) else None,
-            passcode=password
+            passcode=make_password(password)  # SECURITY: Hash password before storing
         ))
         
         if len(users_list) >= batch_size:
@@ -257,7 +257,7 @@ if faculty_csv.exists():
             first_name=str(row['first_name'])[:100],
             last_name=str(row['last_name'])[:100],
             email=email,
-            passcode=password,
+            passcode=make_password(password),  # SECURITY: Hash password before storing
             gender=str(row['gender'])[:10],
             department=str(row['department'])[:100],
             designation=str(row['designation'])[:100],
@@ -364,7 +364,7 @@ if tpcell_csv.exists():
             first_name=str(row['first_name']),
             last_name=str(row['last_name']),
             email=email,
-            passcode=password,
+            passcode=make_password(password),  # SECURITY: Hash password before storing
             gender=str(row['gender']),
             designation=str(row['designation'])
         ))
@@ -425,7 +425,7 @@ if mgmt_csv.exists():
             first_name=str(row['first_name']),
             last_name=str(row['last_name']),
             email=email,
-            passcode=password,
+            passcode=make_password(password),  # SECURITY: Hash password before storing
             gender=str(row['gender']),
             designation=str(row['designation'])
         ))

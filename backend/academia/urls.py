@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from notifications.email_api import send_email_notification
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,6 +13,7 @@ urlpatterns = [
     path('api/tpcell/', include('tpcell.urls')),
     path('api/notifications/', include('notifications.urls')),
     path('api/assignments/', include('assignments.urls')),
+    path('api/send-email/', send_email_notification, name='send_email_notification'),
 ]
 
 # Serve media files in development

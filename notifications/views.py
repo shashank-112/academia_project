@@ -28,24 +28,29 @@ def get_notifications(request):
         notifications = Notification.objects.filter(
             year_id=0, branch_id=0, section_id=0, student_id=0
         )
-        
-        # If user is authenticated and is a student, also include role-specific notifications
+
+        # If user is authenticated and is a student, also include role-specific and personal notifications
         if request.user.is_authenticated:
             user = request.user
             if user.role == 'student':
                 from students.models import Student
                 try:
                     student = Student.objects.get(email=user.email)
-                    role_notifs = Notification.objects.filter(
+                    # Class notifications
+                    class_notifs = Notification.objects.filter(
                         year_id=student.year_id,
                         branch_id=student.branch_id,
                         section_id=student.sec_id,
-                        student_id=0  # Send to all in this class
+                        student_id=0
                     )
-                    notifications = notifications | role_notifs
+                    # Personal notifications
+                    personal_notifs = Notification.objects.filter(
+                        student_id=student.student_id
+                    )
+                    notifications = notifications | class_notifs | personal_notifs
                 except Student.DoesNotExist:
                     pass
-        
+
         data = [{
             'id': n.id,
             'title': n.title,
@@ -56,7 +61,7 @@ def get_notifications(request):
             'priority': n.priority,
             'created_at': n.created_at.isoformat(),
         } for n in notifications.order_by('-created_at')]
-        
+
         return Response(data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':

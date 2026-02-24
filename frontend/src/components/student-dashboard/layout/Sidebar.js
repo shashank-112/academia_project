@@ -6,6 +6,7 @@ const Sidebar = ({ isOpen, activePage, onPageChange, onClose }) => {
     { id: 'home', label: 'Home', icon: '🏠' },
     { id: 'notifications', label: 'Notifications', icon: '🔔' },
     { id: 'performance', label: 'Performance', icon: '📊' },
+    { id: 'attendance', label: 'Attendance', icon: '📅' },
     { id: 'assignments', label: 'Assignments', icon: '📝' },
     { id: 'profile', label: 'Profile', icon: '👤' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },

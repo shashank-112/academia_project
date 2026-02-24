@@ -59,8 +59,8 @@ const Login = () => {
           <span className="demo-email-btn" onClick={() => handleEmailClick('4ycsea1@college.edu')}>
             4ycsea1@college.edu (Student)
           </span>
-          <span className="demo-email-btn" onClick={() => handleEmailClick('lyon.bonellie@college.edu')}>
-            lyon.bonellie@college.edu (Faculty)
+          <span className="demo-email-btn" onClick={() => handleEmailClick('dorothea.stocky@college.edu')}>
+            dorothea.stocky@college.edu (Faculty)
           </span>
           <span className="demo-email-btn" onClick={() => handleEmailClick('anny.gartery@tpcell.edu')}>
             anny.gartery@tpcell.edu (TP Cell)

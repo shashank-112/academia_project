@@ -3,6 +3,7 @@ import DashboardLayout from './layout/DashboardLayout';
 import Home from './pages/Home';
 import Notifications from './pages/Notifications';
 import Performance from './pages/Performance';
+import Attendance from './pages/Attendance';
 import Assignments from './pages/Assignments';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
@@ -19,6 +20,8 @@ const StudentDashboard = () => {
         return <Notifications />;
       case 'performance':
         return <Performance />;
+      case 'attendance':
+        return <Attendance />;
       case 'assignments':
         return <Assignments />;
       case 'profile':

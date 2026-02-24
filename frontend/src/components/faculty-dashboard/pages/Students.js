@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { facultyService } from '../../../services/api';
+import { notificationService } from '../../../services/api';
 import '../styles/Common.css';
 import '../styles/Students.css';
 
@@ -14,6 +15,16 @@ const Students = () => {
     branch: 'all',
     section: 'all',
   });
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [notificationInput, setNotificationInput] = useState({
+    title: '',
+    due_date: '',
+    description: '',
+  });
+  const [sending, setSending] = useState(false);
+  const [sendSuccess, setSendSuccess] = useState(null);
+  const [sendError, setSendError] = useState(null);
 
   // Year ID to display mapping
   const yearNames = {
@@ -268,11 +279,127 @@ const Students = () => {
         <p className="page-subtitle">View and manage students from your courses</p>
       </div>
 
+      {/* SEND MESSAGE MODAL */}
+      {showModal && (
+        <div className="send-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="send-modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <span className="modal-icon">📧</span>
+              <h2>Send Academic Notification</h2>
+              <button className="modal-close-btn" onClick={() => setShowModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="modal-input-group">
+                <label>Title</label>
+                <input
+                  type="text"
+                  className="modal-input"
+                  placeholder="Enter notification title"
+                  value={notificationInput.title}
+                  onChange={e => setNotificationInput({ ...notificationInput, title: e.target.value })}
+                  autoFocus
+                />
+              </div>
+              <div className="modal-input-group">
+                <label>Due Date</label>
+                <input
+                  type="date"
+                  className="modal-input"
+                  value={notificationInput.due_date}
+                  onChange={e => setNotificationInput({ ...notificationInput, due_date: e.target.value })}
+                />
+              </div>
+              <div className="modal-input-group">
+                <label>Description</label>
+                <textarea
+                  className="modal-input modal-textarea"
+                  placeholder="Enter description"
+                  value={notificationInput.description}
+                  onChange={e => setNotificationInput({ ...notificationInput, description: e.target.value })}
+                  rows={4}
+                />
+              </div>
+              <div className="modal-info-row">
+                <span className="modal-info-badge">Type: Academic</span>
+                <span className="modal-info-badge">Priority: High</span>
+              </div>
+              <div className="modal-info-row">
+                <span className="modal-info-badge">Year: {selectedStudent?.year_id}</span>
+                <span className="modal-info-badge">Branch: {branchNames[selectedStudent?.branch_id?.toString()]}</span>
+                <span className="modal-info-badge">Section: {sectionNames[selectedStudent?.section_id?.toString()]}</span>
+                <span className="modal-info-badge">Student ID: {selectedStudent?.id}</span>
+              </div>
+              {sendError && (
+                <div style={{ color: '#ffb74d', marginTop: '0.7rem', fontWeight: 600, textAlign: 'center' }}>
+                  {sendError}
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                className="modal-send-btn"
+                disabled={sending || !notificationInput.title || !notificationInput.due_date || !notificationInput.description}
+                onClick={async () => {
+                  setSending(true);
+                  setSendError(null);
+                  try {
+                    // Backend expects targets array
+                    const targets = [
+                      {
+                        year_id: selectedStudent?.year_id,
+                        branch_id: selectedStudent?.branch_id,
+                        section_id: selectedStudent?.section_id,
+                        student_id: selectedStudent?.id,
+                      }
+                    ];
+                    const payload = {
+                      title: notificationInput.title,
+                      description: notificationInput.description,
+                      type: 'Academic',
+                      priority: 'High',
+                      dueDate: notificationInput.due_date,
+                      targets,
+                    };
+                    await notificationService.createNotification(payload);
+
+                    // Send email notification
+                    await fetch('http://localhost:8000/api/send-email/', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        to: 'yuvashashank56@gmail.com',
+                        subject: notificationInput.title,
+                        message: notificationInput.description,
+                      }),
+                    });
+
+                    setSendSuccess(true);
+                    setSending(false);
+                    setTimeout(() => {
+                      setShowModal(false);
+                      setSendSuccess(null);
+                      setNotificationInput({ title: '', due_date: '', description: '' });
+                    }, 1200);
+                  } catch (err) {
+                    setSendError('Failed to send notification.');
+                    setSending(false);
+                  }
+                }}
+              >
+                {sending ? 'Sending...' : sendSuccess ? 'Sent!' : 'Send Notification'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="students-wrapper">
         {/* LEFT PANEL - STUDENTS LIST */}
         <section className="students-list-panel">
           {/* FILTERS */}
-          <section className="filters-section">
+          <section style={{ marginBottom: "5px" }} className="filters-section">
             <div className="filter-group">
               <label>Year</label>
               <select value={filters.year} onChange={(e) => setFilters({...filters, year: e.target.value})}>
@@ -293,7 +420,7 @@ const Students = () => {
               </select>
             </div>
 
-            <div className="filter-group">
+            <div style={{ marginBottom: "19.6px" }} className="filter-group">
               <label>Section</label>
               <select value={filters.section} onChange={(e) => setFilters({...filters, section: e.target.value})}>
                 {getDynamicSectionOptions(filters.branch).map(opt => (
@@ -407,7 +534,7 @@ const Students = () => {
             <div className="detail-section">
               <h3 className="section-title">⚡ Quick Actions</h3>
               <div className="action-buttons">
-                <button className="action-btn primary">
+                <button className="action-btn primary" onClick={() => setShowModal(true)}>
                   <span>📧</span> Send Message
                 </button>
                 <button className="action-btn secondary">

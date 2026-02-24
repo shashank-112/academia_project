@@ -87,6 +87,15 @@ export const studentService = {
     );
     return response.data;
   },
+  // Attendance endpoints
+  getAttendanceSummary: async () => {
+    const response = await apiClient.get('/students/attendance/summary/');
+    return response.data;
+  },
+  getCourseAttendance: async () => {
+    const response = await apiClient.get('/students/attendance/courses/');
+    return response.data;
+  },
 };
 
 export const facultyService = {
